@@ -51,6 +51,15 @@
     <script src="https://code.highcharts.com/modules/boost.js"></script>
     <link href="css/highcharts.theme.css" rel="stylesheet" />
 
+    <!-- Moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"
+        integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-10-year-range.js"
+        integrity="sha512-fv+Ujl3Bw7MVRNHQwMwNe2+MAOGDGEIAeFK/yapP2ieJCVrxnFWUtglgNavPuQ9GrT4kotETO9UfQZRJTu15rQ=="
+        crossorigin="anonymous"></script>
+
 </head>
 
 <body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
@@ -63,11 +72,11 @@
         <div class="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Daily Numbers</h2>
-                                <form class="w-400 mw-full mb-5">
+                                <h2 class="content-title">Today's Data</h2>
+                                <form class="w-400 mw-full h-100 mb-0">
                                     <div class="form-group">
                                         <select class="form-control" id="daily-variable-select">
                                             <option value="" selected="selected" disabled="disabled">Select a
@@ -85,20 +94,13 @@
                                         </div>
                                     </div>
                                 </form>
+                                <div id="daily-list"
+                                    class="d-flex flex-wrap align-content-start row-with-bg h-200 h-lg-400 overflow-auto">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-0 m-5">
-                            <div class="content m-10">
-                                <h2 class="content-title">Select Canton</h2>
-                                <div id="daily-list" class="h-500 overflow-y-scroll"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
                                 <h2 id="daily-canton-title" class="content-title">Switzerland</h2>

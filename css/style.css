@@ -1,14 +1,4 @@
-/* body {
-    background-color: #17181a;
-    color: #eeeeee;
-    padding: 10px;
-} */
-
-#map {
-    max-width: 750px;
-    margin: 0 auto;
+.canton-list-item-flag {
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-
-/* .flex {
-    background-color: #121212;
-} */

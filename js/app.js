@@ -3,28 +3,15 @@
     let daily_y_axis = ["Cases", "Fatalities", "Hospitalizations"];
     let data = null;
     let state = JSON.parse(localStorage.getItem('state')) ||
-        { property: '', properties: [] };
+        { daily_variable_select: 0, daily_canton: 'CH' };
 
     function init() {
         getData().then(dfs => {
             data = dfs;
             let cases = data[0];
-            // initMap(cases, 'map', cases => {
-            //     let row = cases.loc({ rows: ['2020-10-21'] })
-            //     let data = []
-            //     Object.keys(cantons).forEach(function (key) {
-            //         let canton = key;
-            //         let x = cantons[key].offsetX;
-            //         let y = cantons[key].offsetY;
-            //         let value = row[key + '_diff'].data[0];
-            //         data.push({ id: canton, value: value, dataLabels: { x: x, y: y } });
-            //     });
-            //     return [{
-            //         name: '2020-10-21',
-            //         data: data
-            //     }];
-            // });
-            initDailyList(cases, 'daily-list');
+            let updates = data[data.length - 1];
+
+            initDailyList(cases, updates, 'daily-list');
             initDaily(cases, 'daily', cases => {
                 let series = [];
                 return [{
@@ -35,11 +22,23 @@
         });
     }
 
-    function updateDaily(index) {
+    window.updateDaily = function (canton = '', index = -1) {
+        if (index < 0) {
+            index = state.daily_variable_select;
+        } else {
+            state.daily_variable_select = index;
+        }
+
+        if (canton === '') {
+            canton = state.daily_canton;
+        } else {
+            state.daily_canton = canton;
+        }
+
         let chart = $('#daily').highcharts();
         chart.series[0].update({
-            name: 'CH',
-            data: helperGetIndexValuePairs(data[index]['CH_diff'])
+            name: canton,
+            data: helperGetIndexValuePairs(data[index][canton + '_diff'])
         });
         chart.yAxis[0].axisTitle.attr({
             text: daily_y_axis[index]
@@ -47,8 +46,17 @@
         chart.redraw()
     }
 
+    function updateDailyList(index) {
+        document.getElementById('daily-list').innerHTML = '';
+        initDailyList(data[index], data[data.length - 1], 'daily-list');
+    }
+
     $('#daily-variable-select').change(function () {
-        updateDaily($(this).val());
+        let val = $(this).val();
+
+        state.daily_variable_select = val;
+        updateDaily('', val);
+        updateDailyList(val);
     });
 
     function saveState() {

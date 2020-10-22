@@ -68,13 +68,32 @@ async function getVent() {
     return df;
 }
 
+async function getLastUpdated() {
+    let url = "https://raw.githubusercontent.com/daenuprobst/covid19-cases-switzerland/master/last_updated.csv";
+    let df = await dfd.read_csv(url);
+
+    // There is something wrong with sorting strings in danfo.js,
+    // do not return a DataFrame here
+    let dummy_df = [];
+    for (let i = 0; i < df['Date'].values.length; i++) {
+        dummy_df.push({
+            canton: df['Canton'].values[i],
+            datetime: new Date(df['Date'].values[i] + 'T' + df['Time'].values[i] + ':00')
+        });
+    }
+    dummy_df.sort((a, b) => b['datetime'] - a['datetime']);
+
+    return new dfd.DataFrame(dummy_df);
+}
+
 async function getData() {
     let promises = [
         getCases(),
         getFatalities(),
         getHospitalized(),
         getICU(),
-        getVent()
+        getVent(),
+        getLastUpdated() // always keep at the end
     ];
 
     return await Promise.all(promises);
