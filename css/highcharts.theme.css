@@ -1,0 +1,84 @@
+.highcharts-background {
+  fill: var(--dm-card-bg-color);
+}
+
+/* Navigator (Stock Chart) */
+
+.highcharts-navigator-mask-outside {
+  fill-opacity: 0;
+}
+
+.highcharts-navigator-mask-inside {
+  fill: var(--primary-color);
+  /* navigator.maskFill option */
+  fill-opacity: 0.25;
+  cursor: ew-resize;
+}
+
+.highcharts-navigator-outline {
+  stroke: none;
+  fill: none;
+}
+
+.highcharts-navigator-handle {
+  stroke: var(--primary-color);
+  fill: var(--primary-color);
+  cursor: ew-resize;
+}
+
+.highcharts-navigator-series {
+  fill: #335cad;
+  stroke: #335cad;
+}
+
+.highcharts-navigator-series .highcharts-graph {
+  stroke-width: 1px;
+}
+
+.highcharts-navigator-series .highcharts-area {
+  fill-opacity: 0.25;
+}
+
+.highcharts-navigator-xaxis .highcharts-axis-line {
+  stroke-width: 0;
+}
+
+.highcharts-navigator-xaxis .highcharts-grid-line {
+  stroke-width: 1px;
+  stroke: var(--dm-base-body-bg-color);
+}
+
+.highcharts-navigator-xaxis.highcharts-axis-labels {
+  fill: #999999;
+}
+
+.highcharts-navigator-yaxis .highcharts-grid-line {
+  stroke-width: 0;
+}
+
+.highcharts-scrollbar-thumb {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+  stroke-width: 1px;
+}
+
+.highcharts-scrollbar-button {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+  stroke-width: 1px;
+}
+
+.highcharts-scrollbar-arrow {
+  fill: #ffffff;
+}
+
+.highcharts-scrollbar-rifles {
+  stroke: #ffffff;
+  stroke-width: 1px;
+}
+
+.highcharts-scrollbar-track {
+  fill: var(--dm-base-body-bg-color);
+  stroke: var(--dm-base-body-bg-color);
+  stroke-width: 1px;
+}
