@@ -1,3 +1,6 @@
+import { cantons } from './cantons.js'
+import { getRow } from './helpers.js'
+
 function initMap(df, container, seriesCallback) {
     let url = '/assets/ch.geojson';
 
@@ -5,8 +8,6 @@ function initMap(df, container, seriesCallback) {
         Highcharts.mapChart(container, {
             chart: {
                 map: geojson,
-                // spacing: [10, 10, 10, 10],
-                height: '65%'
             },
             credits: {
                 enabled: false
@@ -17,10 +18,23 @@ function initMap(df, container, seriesCallback) {
             mapNavigation: {
                 enabled: false,
             },
+            tooltip: {
+                nullFormat: 'No data available',
+                formatter: function () {
+                    return '<b>' + this.point.name + '</b><br>' +
+                        'Today: ' + (this.point.value ? this.point.value : '-') + '<br />' +
+                        'Yesterday: ' + (this.point.valueYesterday ? this.point.valueYesterday : '-');
+                }
+            },
             plotOptions: {
+                map: {
+                    nullInteraction: true,
+                },
                 series: {
-                    borderWidth: 0,
-                    keys: ['id', 'value'],
+                    borderWidth: 1,
+                    borderColor: '#222222',
+                    nullColor: '#000000',
+                    keys: ['id', 'value', 'valueYesterday'],
                     joinBy: 'id',
                     states: {
                         hover: {
@@ -30,7 +44,10 @@ function initMap(df, container, seriesCallback) {
                     dataLabels: {
                         enabled: true,
                         format: '{point.value}',
+                        nullFormat: '-',
                         allowOverlap: true,
+                        align: 'center',
+                        position: 'center',
                         style: {
                             fontSize: '15px',
                             fontWeight: 'bold',
@@ -40,7 +57,8 @@ function initMap(df, container, seriesCallback) {
                     point: {
                         events: {
                             click: function () {
-                                console.log(this.name);
+                                dashcoch.state.daily_canton = this.id;
+                                dashcoch.updateDaily();
                             }
                         }
                     }
@@ -63,7 +81,7 @@ function initMap(df, container, seriesCallback) {
                 }]
             },
             colorAxis: {
-                visible: false,
+                visible: true,
                 stops: [
                     [0, '#2D384D'],
                     [1.0, '#DB4453']
@@ -74,3 +92,5 @@ function initMap(df, container, seriesCallback) {
         });
     });
 }
+
+export { initMap }

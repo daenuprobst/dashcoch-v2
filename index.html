@@ -24,22 +24,95 @@
     <!-- CSS Reset -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
     <!-- Halfmoon CSS -->
     <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
 
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- JQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"
-        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
-        crossorigin="anonymous"></script>
+</head>
 
-
-    <!-- DanfoJS-->
-    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.1.2/dist/index.min.js"></script>
+<body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
+    <div class="page-wrapper with-navbar">
+        <nav class="navbar">
+            <a href="#" class="navbar-brand">
+                COVID-19 Information for Switzerland
+            </a>
+        </nav>
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-10">
+                                <h2 class="content-title">Today's Data</h2>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="daily-variable-select">
+                                                <option value="" selected="selected" disabled="disabled">Select a
+                                                    variable
+                                                </option>
+                                                <option value=0 selected="Selected">Cases</option>
+                                                <option value=1>Fatalities</option>
+                                                <option value=2>Hospitalizations (All)</option>
+                                                <option value=3>Hospitalizations (Normal)</option>
+                                                <option value=4>Hospitalizations (ICU)</option>
+                                                <option value=5>Hospitalizations (Ventilated)</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block mr-10">
+                                                        <input type="checkbox" id="daily-total-toggle" value="total">
+                                                        <label for="daily-total-toggle">Total</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-append" style="display: none">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block">
+                                                        <input type="checkbox" id="daily-per-capita-toggle"
+                                                            value="per-capita">
+                                                        <label for="daily-per-capita-toggle">Per Capita</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="daily-list" style="display:none !important"
+                                    class="d-flex flex-wrap align-content-start row-with-bg h-200 h-lg-400 overflow-auto">
+                                </div>
+                                <div id="map" class="h-350 h-lg-450"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-10">
+                                <h2 id="daily-canton-title" class="content-title">Switzerland</h2>
+                                <div id="daily" class="h-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-10">
+                                <h2 class="content-title">Test Positivity Rate</h2>
+                                <div id="test-positivity-rate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Highcharts-->
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
@@ -60,68 +133,11 @@
         integrity="sha512-fv+Ujl3Bw7MVRNHQwMwNe2+MAOGDGEIAeFK/yapP2ieJCVrxnFWUtglgNavPuQ9GrT4kotETO9UfQZRJTu15rQ=="
         crossorigin="anonymous"></script>
 
-</head>
-
-<body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
-    <div class="page-wrapper with-navbar">
-        <nav class="navbar">
-            <a href="#" class="navbar-brand">
-                COVID-19 Information for Switzerland
-            </a>
-        </nav>
-        <div class="content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card p-0 m-5">
-                            <div class="content m-10">
-                                <h2 class="content-title">Today's Data</h2>
-                                <form class="w-400 mw-full h-100 mb-0">
-                                    <div class="form-group">
-                                        <select class="form-control" id="daily-variable-select">
-                                            <option value="" selected="selected" disabled="disabled">Select a
-                                                variable
-                                            </option>
-                                            <option value=0 selected="Selected">Cases</option>
-                                            <option value=1>Fatalities</option>
-                                            <option value=2>Hospitalizations</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom-switch">
-                                            <input type="checkbox" id="daily-per-capita-toggle" value="per-capita">
-                                            <label for="daily-per-capita-toggle">Per Capita</label>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div id="daily-list"
-                                    class="d-flex flex-wrap align-content-start row-with-bg h-200 h-lg-400 overflow-auto">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card p-0 m-5">
-                            <div class="content m-10">
-                                <h2 id="daily-canton-title" class="content-title">Switzerland</h2>
-                                <div id="daily" class="h-500"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="https://stefanhaustein.github.io/notemplate/src/notemplate.js"></script>
     <!-- Halfmoon JS -->
     <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
-    <script src="js/helpers.js"></script>
-    <script src="js/cantons.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/daily-list.js"></script>
-    <script src="js/daily.js"></script>
-    <script src="js/app.js"></script>
+
+    <script type="module" src="js/app.js"></script>
     <script>
         // Analytics
     </script>

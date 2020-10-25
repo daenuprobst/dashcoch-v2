@@ -1,5 +1,8 @@
 let cantons = [
     {
+        id: 'CH',
+        name: 'Schweiz / Suisse / Svizzera / Svizra'
+    }, {
         id: 'AG',
         name: 'Aargau',
         offsetX: 0,
@@ -131,3 +134,5 @@ let cantons = [
         offsetY: 0,
     }
 ]
+
+export { cantons }

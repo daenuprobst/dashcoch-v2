@@ -15,7 +15,8 @@ function initDaily(df, container, seriesCallback) {
         },
         plotOptions: {
             column: {
-                borderWidth: 0
+                borderWidth: 0,
+                pointPadding: 0.0
             }
         },
         boost: {
@@ -65,3 +66,5 @@ function initDaily(df, container, seriesCallback) {
         series: seriesCallback(df)
     });
 }
+
+export { initDaily };
