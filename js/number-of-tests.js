@@ -1,4 +1,4 @@
-function initDaily(container) {
+function initNumberOfTests(container) {
     Highcharts.stockChart(container, {
         chart: {
             type: 'column',
@@ -10,6 +10,10 @@ function initDaily(container) {
                 }
             }
         },
+        colors: [
+            '#003f5c',
+            '#f95d6a',
+        ],
         credits: {
             enabled: false
         },
@@ -17,7 +21,7 @@ function initDaily(container) {
             column: {
                 borderWidth: 0,
                 pointPadding: 0.0,
-                color: '#f95d6a'
+                stacking: 'normal'
             }
         },
         boost: {
@@ -34,7 +38,7 @@ function initDaily(container) {
         },
         yAxis: {
             title: {
-                text: 'Cases'
+                text: 'Positive Tests [%]'
             },
             labels: {
                 style: {
@@ -64,8 +68,8 @@ function initDaily(container) {
             inputEnabled: false,
             selected: 0,
         },
-        series: [{}]
+        series: [{}, {}]
     });
 }
 
-export { initDaily };
+export { initNumberOfTests }

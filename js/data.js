@@ -1,4 +1,4 @@
-import { readCSV, forwardFill, multiplyColumn } from './helpers.js'
+import { readCSV, forwardFill, multiplyColumn, where, setIndex, groupBy } from './helpers.js'
 import { cantons } from './cantons.js'
 
 async function getCases() {
@@ -123,7 +123,17 @@ async function getHospitalizedTotal() {
 
 async function getTestPositivityRate() {
     let url = 'https://raw.githubusercontent.com/daenuprobst/covid19-cases-switzerland/master/covid19_tests_switzerland_bag.csv';
-    return await readCSV(url);
+    let df = await readCSV(url, [1]);
+
+    df['frac_negative'] = multiplyColumn(df['frac_negative'], 100);
+
+    return df;
+}
+
+async function getAgeSex() {
+    let url = 'https://raw.githubusercontent.com/daenuprobst/covid19-cases-switzerland/master/covid19_cases_fatalities_switzerland_bag.csv';
+    let df = await readCSV(url);
+    // console.log(groupBy(where(df, 'canton', 'CH'), ['sex', 'age_group'], 'sum'));
 }
 
 async function getLastUpdated() {
@@ -142,6 +152,10 @@ async function getLastUpdated() {
     return tmp;
 }
 
+async function getOurworldindata() {
+    let url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv';
+}
+
 async function getData() {
     let promises = [
         getCases(),
@@ -151,7 +165,16 @@ async function getData() {
         getICU(),
         getVent(),
         getTestPositivityRate(),
+        getAgeSex(),
         getLastUpdated() // always keep at the end
+    ];
+
+    return await Promise.all(promises);
+}
+
+async function getGlobalData() {
+    let promises = [
+
     ];
 
     return await Promise.all(promises);

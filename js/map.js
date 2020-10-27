@@ -1,7 +1,7 @@
 import { cantons } from './cantons.js'
 import { getRow } from './helpers.js'
 
-function initMap(df, container, seriesCallback) {
+function initMap(container, mapReadyCallback) {
     let url = '/assets/ch.geojson';
 
     Highcharts.getJSON(url, function (geojson) {
@@ -23,7 +23,8 @@ function initMap(df, container, seriesCallback) {
                 formatter: function () {
                     return '<b>' + this.point.name + '</b><br>' +
                         'Today: ' + (this.point.value ? this.point.value : '-') + '<br />' +
-                        'Yesterday: ' + (this.point.valueYesterday ? this.point.valueYesterday : '-');
+                        'Yesterday: ' + (this.point.valueYesterday ? this.point.valueYesterday : '-') + '<br />' +
+                        'Same Day Last Week: ' + (this.point.valueLastWeek ? this.point.valueLastWeek : '-');
                 }
             },
             plotOptions: {
@@ -34,7 +35,7 @@ function initMap(df, container, seriesCallback) {
                     borderWidth: 1,
                     borderColor: '#222222',
                     nullColor: '#000000',
-                    keys: ['id', 'value', 'valueYesterday'],
+                    keys: ['id', 'value', 'valueYesterday', 'valueLastWeek'],
                     joinBy: 'id',
                     states: {
                         hover: {
@@ -83,13 +84,15 @@ function initMap(df, container, seriesCallback) {
             colorAxis: {
                 visible: true,
                 stops: [
-                    [0, '#2D384D'],
-                    [1.0, '#DB4453']
+                    [0, '#003f5c'],
+                    [1.0, '#f95d6a'],
                 ],
                 min: 0,
             },
-            series: seriesCallback(df)
+            series: [{}]
         });
+
+        mapReadyCallback();
     });
 }
 

@@ -4,6 +4,8 @@ import { initDaily } from './daily.js';
 import { initMap } from './map.js';
 import { cantons } from './cantons.js';
 import { getRow } from './helpers.js';
+import { initTestPositivityRate } from './test-positivity-rate.js';
+import { initNumberOfTests } from './number-of-tests.js';
 
 (function (window) {
     'use strict';
@@ -19,39 +21,41 @@ import { getRow } from './helpers.js';
             let cases = data[0];
             let updates = data[data.length - 1];
 
-            initDailyList(cases, updates, 'daily-list');
-            initDaily(cases, 'daily', cases => {
-                return [{
-                    name: 'CH',
-                    data: cases['CH_diff']
-                }];
+            initDaily('daily');
+            dashcoch.updateDaily();
+
+            // As geojson data is loaded async, supply callback
+            initMap('map', () => {
+                dashcoch.updateMap();
             });
-            initMap(cases, 'map', df => {
-                let today = Date.parse(moment(new Date()).tz('Europe/Zurich').format('YYYY-MM-DD'));
-                let yesterday = Date.parse(moment(new Date()).subtract(1, 'day').tz('Europe/Zurich').format('YYYY-MM-DD'));
-                let rowToday = getRow(df, today);
-                let rowYesterday = getRow(df, yesterday);
 
-                let suffix = '_diff';
-                if (dashcoch.state.daily_total) {
-                    suffix = '';
-                }
+            initTestPositivityRate('test-positivity-rate');
+            dashcoch.updateTestPositivityRate();
 
-                if (dashcoch.state.daily_per_capita) {
-                    suffix += '_pc'
-                }
+            initNumberOfTests('number-of-tests');
+            dashcoch.updateNumberOfTests();
+        });
+    }
 
-                let data = [];
+    dashcoch.updateTestPositivityRate = function () {
+        let testPositivityRate = data[6];
+        let chart = Highcharts.charts[document.getElementById('test-positivity-rate').getAttribute('data-highcharts-chart')];
+        chart.series[0].update({
+            name: 'Test Positivity Rate',
+            data: testPositivityRate['frac_negative']
+        });
+    }
 
-                for (let i = 0; i < cantons.length; i++) {
-                    let canton = cantons[i].id;
-                    if (canton === 'CH') continue;
-                    data.push([canton, rowToday[canton + suffix], rowYesterday[canton + suffix]]);
-                }
-
-                console.log(data)
-                return [{ name: 'Cases', data: data }]
-            });
+    dashcoch.updateNumberOfTests = function () {
+        let testPositivityRate = data[6];
+        let chart = Highcharts.charts[document.getElementById('number-of-tests').getAttribute('data-highcharts-chart')];
+        chart.series[0].update({
+            name: 'Number of Negative Tests',
+            data: testPositivityRate['n_negative']
+        });
+        chart.series[1].update({
+            name: 'Number of Positive Tests',
+            data: testPositivityRate['n_positive']
         });
     }
 
@@ -83,8 +87,10 @@ import { getRow } from './helpers.js';
         let chart = Highcharts.charts[document.getElementById('map').getAttribute('data-highcharts-chart')];
         let today = Date.parse(moment(new Date()).tz('Europe/Zurich').format('YYYY-MM-DD'));
         let yesterday = Date.parse(moment(new Date()).subtract(1, 'day').tz('Europe/Zurich').format('YYYY-MM-DD'));
+        let lastWeek = Date.parse(moment(new Date()).subtract(7, 'day').tz('Europe/Zurich').format('YYYY-MM-DD'));
         let rowToday = getRow(data[dashcoch.state.daily_variable_select], today);
         let rowYesterday = getRow(data[dashcoch.state.daily_variable_select], yesterday);
+        let rowLastWeek = getRow(data[dashcoch.state.daily_variable_select], lastWeek);
 
         let suffix = '_diff';
         if (dashcoch.state.daily_total) {
@@ -100,7 +106,7 @@ import { getRow } from './helpers.js';
         for (let i = 0; i < cantons.length; i++) {
             let canton = cantons[i].id;
             if (canton === 'CH') continue;
-            series_data.push([canton, rowToday[canton + suffix], rowYesterday[canton + suffix]]);
+            series_data.push([canton, rowToday[canton + suffix], rowYesterday[canton + suffix], rowLastWeek[canton + suffix]]);
         }
 
         chart.series[0].update({
@@ -110,16 +116,10 @@ import { getRow } from './helpers.js';
         chart.redraw();
     }
 
-    dashcoch.updateDailyList = function (index) {
-        document.getElementById('daily-list').innerHTML = '';
-        initDailyList(data[dashcoch.state.daily_variable_select], data[data.length - 1], 'daily-list');
-    }
-
     // Select the daily variable
     document.getElementById('daily-variable-select').addEventListener('change', event => {
         dashcoch.state.daily_variable_select = event.target.value;
         dashcoch.updateDaily();
-        dashcoch.updateDailyList();
         dashcoch.updateMap();
     });
 
@@ -127,7 +127,6 @@ import { getRow } from './helpers.js';
     document.getElementById('daily-total-toggle').addEventListener('change', event => {
         dashcoch.state.daily_total = event.target.checked;
         dashcoch.updateDaily();
-        dashcoch.updateDailyList();
         dashcoch.updateMap();
     });
 
@@ -135,7 +134,6 @@ import { getRow } from './helpers.js';
     document.getElementById('daily-per-capita-toggle').addEventListener('change', event => {
         dashcoch.state.daily_per_capita = event.target.checked;
         dashcoch.updateDaily();
-        dashcoch.updateDailyList();
         dashcoch.updateMap();
     });
 
