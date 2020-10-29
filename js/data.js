@@ -130,10 +130,20 @@ async function getTestPositivityRate() {
     return df;
 }
 
-async function getAgeSex() {
+async function getAgeSexDist() {
     let url = 'https://raw.githubusercontent.com/daenuprobst/covid19-cases-switzerland/master/covid19_cases_fatalities_switzerland_bag.csv';
     let df = await readCSV(url);
-    // console.log(groupBy(where(df, 'canton', 'CH'), ['sex', 'age_group'], 'sum'));
+    let data = {};
+    for (const canton of cantons) {
+        data[canton.id] = groupBy(where(df, [
+            ['canton', e => e === canton.id],
+            ['age_group', e => {
+                return e !== 'Unbekannt'
+            }]
+        ]), ['sex', 'age_group'], 'sum');
+    }
+
+    return data;
 }
 
 async function getLastUpdated() {
@@ -165,11 +175,23 @@ async function getData() {
         getICU(),
         getVent(),
         getTestPositivityRate(),
-        getAgeSex(),
-        getLastUpdated() // always keep at the end
+        getAgeSexDist(),
+        getLastUpdated()
     ];
 
-    return await Promise.all(promises);
+    let results = await Promise.all(promises);
+
+    return {
+        cases: results[0],
+        fatalities: results[1],
+        hospitalizedTotal: results[2],
+        hospitalized: results[3],
+        icu: results[4],
+        vent: results[5],
+        testPositivityRate: results[6],
+        ageSexDist: results[7],
+        lastUpdated: results[8]
+    }
 }
 
 async function getGlobalData() {

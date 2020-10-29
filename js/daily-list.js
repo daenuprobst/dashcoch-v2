@@ -1,4 +1,3 @@
-import { cantons } from './cantons.js'
 import { getRow } from './helpers.js'
 
 function initDailyList(df, df_updates, container) {

@@ -1,4 +1,4 @@
-export default function initTestPositivityRate(container) {
+export default function initCantonComparison(container, initSeriesCallback) {
     Highcharts.stockChart(container, {
         chart: {
             animation: false,
@@ -9,17 +9,23 @@ export default function initTestPositivityRate(container) {
                 }
             }
         },
+        // colors: [
+        //     '#003f5c',
+        //     '#f95d6a',
+        // ],
         credits: {
             enabled: false
         },
         plotOptions: {
-            series: {
-                color: '#f95d6a',
-                grouping: false
+            column: {
+                borderWidth: 0,
+                pointPadding: 0.0,
+                stacking: 'normal'
             }
         },
         boost: {
             enabled: true,
+            seriesThreshold: 10,
         },
         title: {
             text: ''
@@ -32,7 +38,7 @@ export default function initTestPositivityRate(container) {
         },
         yAxis: {
             title: {
-                text: 'Positive Tests [%]'
+                text: 'Cases'
             },
             labels: {
                 style: {
@@ -62,6 +68,6 @@ export default function initTestPositivityRate(container) {
             inputEnabled: false,
             selected: 0,
         },
-        series: [{}]
+        series: initSeriesCallback()
     });
 }

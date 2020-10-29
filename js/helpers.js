@@ -16,13 +16,14 @@ function parseCSV(text, sep = ',') {
         for (let j = 0; j < values.length; j++) {
             let value = values[j];
 
+            // TODO: Fix the following mess
             if (value === null || value === '') {
                 // No value -> null
                 rows[i].push(null);
             } else if (value.match(/\d{4}-\d{2}-\d{2}/)) {
                 // Basic date match
                 rows[i].push(Date.parse(value));
-            } else if (value.match(/^(\d|-\d)/)) {
+            } else if (value.match(/^(\d|-\d)/) && !value.includes(' ') && !value.endsWith('+')) {
                 // Number
                 rows[i].push(parseFloat(value));
             } else {
@@ -51,6 +52,14 @@ async function readCSV(url, index = [0], sep = ',') {
     }
 
     return obj;
+}
+
+function getChart(container) {
+    return Highcharts.charts[document.getElementById(container).getAttribute('data-highcharts-chart')];
+}
+
+function getTargetCoutryDate(daysAgo = 0) {
+    return Date.parse(moment(new Date()).subtract(daysAgo, 'day').tz('Europe/Zurich').format('YYYY-MM-DD'));
 }
 
 function getRow(data, rowId) {
@@ -91,18 +100,25 @@ function getUnique(column) {
     return [...new Set(column.map(item => item[1]))];
 }
 
-function where(df, columnName, value) {
+function where(df, filters) {
     let newDf = {};
 
     for (const col in df) {
         newDf[col] = [];
     }
 
-    for (let i = 0; i < df[columnName].length; i++) {
-        if (df[columnName][i][1] === value) {
-            for (const col in df) {
-                newDf[col].push(df[col][i]);
+    for (let i = 0; i < df[filters[0][0]].length; i++) {
+        let skip = false;
+        for (const filter of filters) {
+            if (!filter[1](df[filter[0]][i][1])) {
+                skip = true;
             }
+        }
+
+        if (skip) continue;
+
+        for (const col in df) {
+            newDf[col].push(df[col][i]);
         }
     }
 
@@ -167,4 +183,7 @@ function groupBy_(df, columnNames, agg) {
     return newDf;
 }
 
-export { readCSV, getRow, forwardFill, multiplyColumn, where, setIndex, groupBy };
+export {
+    readCSV, getRow, forwardFill, multiplyColumn, where,
+    setIndex, groupBy, getChart, getTargetCoutryDate
+};

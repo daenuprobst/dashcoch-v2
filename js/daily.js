@@ -1,4 +1,4 @@
-function initDaily(container) {
+export default function initDaily(container, extremesChangeCallback) {
     Highcharts.stockChart(container, {
         chart: {
             type: 'column',
@@ -30,7 +30,12 @@ function initDaily(container) {
             title: {
                 text: 'Date'
             },
-            type: 'datetime'
+            type: 'datetime',
+            events: {
+                setExtremes: function (e) {
+                    extremesChangeCallback(e);
+                }
+            }
         },
         yAxis: {
             title: {
@@ -67,5 +72,3 @@ function initDaily(container) {
         series: [{}]
     });
 }
-
-export { initDaily };

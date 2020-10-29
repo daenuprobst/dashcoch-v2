@@ -1,4 +1,4 @@
-function initNumberOfTests(container) {
+export default function initNumberOfTests(container) {
     Highcharts.stockChart(container, {
         chart: {
             type: 'column',
@@ -71,5 +71,3 @@ function initNumberOfTests(container) {
         series: [{}, {}]
     });
 }
-
-export { initNumberOfTests }

@@ -1,7 +1,4 @@
-import { cantons } from './cantons.js'
-import { getRow } from './helpers.js'
-
-function initMap(container, mapReadyCallback) {
+export default function initMap(container, mapReadyCallback) {
     let url = '/assets/ch.geojson';
 
     Highcharts.getJSON(url, function (geojson) {
@@ -37,9 +34,14 @@ function initMap(container, mapReadyCallback) {
                     nullColor: '#000000',
                     keys: ['id', 'value', 'valueYesterday', 'valueLastWeek'],
                     joinBy: 'id',
+                    allowPointSelect: true,
                     states: {
                         hover: {
                             borderColor: '#222222',
+                        },
+                        select: {
+                            color: '#ffa600',
+                            borderColor: '#ffffff'
                         }
                     },
                     dataLabels: {
@@ -60,6 +62,8 @@ function initMap(container, mapReadyCallback) {
                             click: function () {
                                 dashcoch.state.daily_canton = this.id;
                                 dashcoch.updateDaily();
+                                dashcoch.updateAgeSexDist();
+                                dashcoch.updateCantonComparison();
                             }
                         }
                     }
@@ -95,5 +99,3 @@ function initMap(container, mapReadyCallback) {
         mapReadyCallback();
     });
 }
-
-export { initMap }

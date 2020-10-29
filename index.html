@@ -38,6 +38,7 @@
 
 <body class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
     <div class="page-wrapper with-navbar">
+        <div class="sticky-alerts"></div>
         <nav class="navbar">
             <a href="#" class="navbar-brand">
                 COVID-19 Information for Switzerland
@@ -49,7 +50,8 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Today's Data</h2>
+                                <h2 class="content-title">Today's Data<span
+                                        class="badge badge-pill float-right">Cantonal Data</span></h2>
                                 <form class="mw-full h-50 mb-0">
                                     <div class="form-group">
                                         <div class="input-group">
@@ -57,12 +59,12 @@
                                                 <option value="" selected="selected" disabled="disabled">Select a
                                                     variable
                                                 </option>
-                                                <option value=0 selected="Selected">Cases</option>
-                                                <option value=1>Fatalities</option>
-                                                <option value=2>Hospitalizations (All)</option>
-                                                <option value=3>Hospitalizations (Normal)</option>
-                                                <option value=4>Hospitalizations (ICU)</option>
-                                                <option value=5>Hospitalizations (Ventilated)</option>
+                                                <option value="cases" selected="Selected">Cases</option>
+                                                <option value="fatalities">Fatalities</option>
+                                                <option value="hospitalizedTotal">Hospitalizations (All)</option>
+                                                <option value="hospitalized">Hospitalizations (Normal)</option>
+                                                <option value="icu">Hospitalizations (ICU)</option>
+                                                <option value="vent">Hospitalizations (Ventilated)</option>
                                             </select>
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
@@ -101,16 +103,17 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Test Positivity Rate</h2>
-                                <div id="test-positivity-rate"></div>
+                                <h2 id="age-sex-dist-title" class="content-title">Age and Sex Distribution</h2>
+                                <div id="age-sex-dist"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Number of Tests</h2>
-                                <div id="number-of-tests"></div>
+                                <h2 class="content-title">Compared to Other Cantons<span
+                                        class="badge badge-pill float-right">Cantonal Data</span></h2>
+                                <div id="canton-comparison"></div>
                             </div>
                         </div>
                     </div>
@@ -119,14 +122,18 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Age Distribution</h2>
-                                <div id="age-distribution"></div>
+                                <h2 class="content-title">Test Positivity Rate<span
+                                        class="badge badge-secondary badge-pill float-right">FOPH Data</span></h2>
+                                <div id="test-positivity-rate"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
+                                <h2 class="content-title">Number of Tests<span
+                                        class="badge badge-secondary badge-pill float-right">FOPH Data</span></h2>
+                                <div id="number-of-tests"></div>
                             </div>
                         </div>
                     </div>
@@ -134,6 +141,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Halfmoon JS -->
+    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
 
     <!-- Highcharts-->
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
@@ -155,9 +165,6 @@
         crossorigin="anonymous"></script>
 
     <script src="https://stefanhaustein.github.io/notemplate/src/notemplate.js"></script>
-    <!-- Halfmoon JS -->
-    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
-
     <script type="module" src="js/app.js"></script>
     <script>
         // Analytics
