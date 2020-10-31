@@ -74,26 +74,56 @@ function getRow(data, rowId) {
     return row;
 }
 
-function forwardFill(column) {
-    let new_column = column.slice();
+function getField(data, rowId, columnName) {
+    let field = Number.NaN;
+    let column = data[columnName];
+    for (let i = 0; i < column.length; i++) {
+        if (column[i][0] === rowId) {
+            field = column[i][1];
+        }
+    }
+    return field;
+}
 
-    for (let i = 1; i < new_column.length; i++) {
-        if (new_column[i][1] === null) {
-            new_column[i][1] = new_column[i - 1][1];
+function forwardFill(column) {
+    let newColumn = column.slice();
+
+    for (let i = 1; i < newColumn.length; i++) {
+        if (newColumn[i][1] === null) {
+            newColumn[i][1] = newColumn[i - 1][1];
         }
     }
 
-    return new_column;
+    return newColumn;
+}
+
+function backwardsResample(column, windowSize = 7, n = null) {
+    let currentWindowSize = windowSize;
+    let k = 0;
+    let newColumn = [];
+
+    for (let i = column.length - 1 - windowSize; i >= windowSize; i -= windowSize) {
+        let sum = 0;
+        for (let j = 0; j < windowSize; j++) {
+            sum += column[i - j][1];
+        }
+        newColumn.push([k++, sum / windowSize]);
+        if (newColumn.length === n) {
+            break;
+        }
+    }
+
+    return newColumn.reverse();
 }
 
 function multiplyColumn(column, scalar) {
-    let new_column = column.slice();
+    let newColumn = column.slice();
 
-    for (let i = 0; i < new_column.length; i++) {
-        new_column[i][1] = new_column[i][1] * scalar;
+    for (let i = 0; i < newColumn.length; i++) {
+        newColumn[i][1] = newColumn[i][1] * scalar;
     }
 
-    return new_column;
+    return newColumn;
 }
 
 function getUnique(column) {
@@ -184,6 +214,6 @@ function groupBy_(df, columnNames, agg) {
 }
 
 export {
-    readCSV, getRow, forwardFill, multiplyColumn, where,
-    setIndex, groupBy, getChart, getTargetCoutryDate
+    readCSV, getRow, getField, forwardFill, multiplyColumn, where,
+    setIndex, groupBy, getChart, getTargetCoutryDate, backwardsResample
 };

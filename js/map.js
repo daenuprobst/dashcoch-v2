@@ -1,5 +1,11 @@
-export default function initMap(container, mapReadyCallback) {
+export default function initMap(container, mapReadyCallback, selectionChangedCallback) {
     let url = '/assets/ch.geojson';
+
+    // This is an ugly hack because highcharts fires the select event
+    // before the unselect event, so we have to keep track of the currently
+    // selected value, to see whether a new one was selected or the current
+    // one just deselected.
+    let selected = null;
 
     Highcharts.getJSON(url, function (geojson) {
         Highcharts.mapChart(container, {
@@ -59,11 +65,14 @@ export default function initMap(container, mapReadyCallback) {
                     },
                     point: {
                         events: {
-                            click: function () {
-                                dashcoch.state.daily_canton = this.id;
-                                dashcoch.updateDaily();
-                                dashcoch.updateAgeSexDist();
-                                dashcoch.updateCantonComparison();
+                            select: e => {
+                                selected = e.target.id;
+                                selectionChangedCallback(e.target.id);
+                            },
+                            unselect: function (e) {
+                                if (e.target.id === selected) {
+                                    selectionChangedCallback('CH');
+                                }
                             }
                         }
                     }

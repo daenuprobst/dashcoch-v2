@@ -1,73 +1,40 @@
-export default function initCantonComparison(container, initSeriesCallback) {
-    Highcharts.stockChart(container, {
+export default function initCantonComparison(container, categories) {
+    Highcharts.chart(container, {
         chart: {
-            animation: false,
-            zoomType: 'x',
-            // spacing: [0, 0, 0, 0],
-            events: {
-                load: function () {
-                }
-            }
+            type: 'column'
         },
-        // colors: [
-        //     '#003f5c',
-        //     '#f95d6a',
-        // ],
+        title: {
+            text: ''
+        },
         credits: {
             enabled: false
+        },
+        legend: {
+            enabled: false,
+        },
+        xAxis: {
+            categories: categories,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Cases per 100 000 Inhabitants'
+            },
+            gridLineColor: '#262626',
+        },
+        tooltip: {
+            nullFormat: 'No data available',
+            pointFormat: '<b>{point.key}</b><br>' +
+                '{point.y:.2f} per 100 000 Inhabitants'
         },
         plotOptions: {
             column: {
                 borderWidth: 0,
                 pointPadding: 0.0,
-                stacking: 'normal'
+                color: '#f95d6a'
             }
         },
-        boost: {
-            enabled: true,
-            seriesThreshold: 10,
-        },
-        title: {
-            text: ''
-        },
-        xAxis: {
-            title: {
-                text: 'Date'
-            },
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: 'Cases'
-            },
-            labels: {
-                style: {
-                    color: '#ffffff',
-                    textOutline: '2px contrast'
-                }
-            },
-            showFirstLabel: false,
-            gridLineColor: '#262626',
-        },
-        legend: {
-            enabled: false,
-        },
-        rangeSelector: {
-            buttons: [{
-                type: 'month',
-                count: 1,
-                text: '1m'
-            }, {
-                type: 'month',
-                count: 3,
-                text: '3m'
-            }, {
-                type: 'all',
-                text: 'All'
-            }],
-            inputEnabled: false,
-            selected: 0,
-        },
-        series: initSeriesCallback()
+        series: [{}]
     });
 }

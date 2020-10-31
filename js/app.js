@@ -2,11 +2,12 @@ import { getData } from './data.js';
 import initDaily from './daily.js';
 import initMap from './map.js';
 import { cantons } from './cantons.js';
-import { getRow, getChart, getTargetCoutryDate } from './helpers.js';
+import { getRow, getField, getChart, getTargetCoutryDate, backwardsResample } from './helpers.js';
 import initTestPositivityRate from './test-positivity-rate.js';
 import initNumberOfTests from './number-of-tests.js';
 import initAgeSexDist from './age-sex-dist.js';
 import initCantonComparison from './canton-comparison.js';
+import initSummary from './summary.js'
 
 (function (window) {
     'use strict';
@@ -27,8 +28,8 @@ import initCantonComparison from './canton-comparison.js';
     function init() {
         getData().then(dfs => {
             data = dfs;
-            let cases = data[0];
-            let updates = data[data.length - 1];
+
+            initSummaries();
 
             initDaily('daily', e => {
                 // Range selector changed
@@ -36,9 +37,15 @@ import initCantonComparison from './canton-comparison.js';
             });
             dashcoch.updateDaily();
 
-            // As geojson data is loaded async, supply callback
             initMap('map', () => {
+                // Geojson for map finished loading
                 dashcoch.updateMap();
+            }, canton => {
+                // Selection changed
+                dashcoch.state.daily_canton = canton;
+                dashcoch.updateDaily();
+                dashcoch.updateAgeSexDist();
+                dashcoch.updateCantonComparison();
             });
 
             initTestPositivityRate('test-positivity-rate');
@@ -50,19 +57,8 @@ import initCantonComparison from './canton-comparison.js';
             initAgeSexDist('age-sex-dist');
             dashcoch.updateAgeSexDist();
 
-            initCantonComparison('canton-comparison', () => {
-                let chart = getChart('canton-comparison');
-                let series = [];
-                for (const canton of cantons) {
-                    if (canton.id === 'CH') continue;
-                    series.push({
-                        name: canton.id,
-                        data: data[dashcoch.state.daily_variable_select][canton.id + getSuffix()],
-                        color: (canton.id === dashcoch.state.daily_canton) ? '#f95d6a' : '#003f5c'
-                    });
-                }
-                return series;
-            });
+            initCantonComparison('canton-comparison', cantons.map(canton => canton.id));
+            dashcoch.updateCantonComparison();
         });
     }
 
@@ -71,15 +67,9 @@ import initCantonComparison from './canton-comparison.js';
         let title = document.getElementById('age-sex-dist-title');
 
         title.innerHTML = daily_y_axis[dashcoch.state.daily_variable_select] + ' in ' +
-            cantons.find(c => c.id == dashcoch.state.daily_canton).name +
-            '<span class="badge badge-secondary badge-pill float-right">FOPH Data</span>';
+            cantons.find(c => c.id == dashcoch.state.daily_canton).name;
 
         if (!['cases', 'fatalities'].includes(dashcoch.state.daily_variable_select)) {
-            halfmoon.initStickyAlert({
-                title: 'Info',
-                content: 'Age and sex distribution for hospitalisations is not available.',
-                alertType: 'alert-secondary',
-            });
             chart.series[0].update({ data: [] });
             chart.series[1].update({ data: [] });
             return;
@@ -124,27 +114,40 @@ import initCantonComparison from './canton-comparison.js';
     }
 
     dashcoch.updateCantonComparison = function () {
-        // let chart = getChart('canton-comparison');
-        // let i = 0;
-        // for (const canton of cantons) {
-        //     if (canton.id == 'CH') continue;
-        //     chart.series[i++].update({
-        //         color: '#ff0000'
-        //     });
-        // }
+        let chart = getChart('canton-comparison');
+        let rowToday = getRow(data[dashcoch.state.daily_variable_select], getTargetCoutryDate());
+        let seriesData = [];
+        let seriesColor = [];
+
+        for (const canton of cantons) {
+            seriesData.push(rowToday[canton.id + '_pc'])
+            if (canton.id === dashcoch.state.daily_canton) {
+                seriesColor.push('#2fad94');
+            } else {
+                seriesColor.push('#f95d6a');
+            }
+        }
+
+        chart.series[0].update({
+            name: 'Cases',
+            data: seriesData,
+            colorByPoint: true,
+            colors: seriesColor
+        });
     }
 
     dashcoch.updateDaily = function () {
         let title = document.getElementById('daily-canton-title');
         let chart = getChart('daily');
+        let suffix = getSuffix();
 
         title.innerHTML = daily_y_axis[dashcoch.state.daily_variable_select] + ' in ' +
-            cantons.find(c => c.id == dashcoch.state.daily_canton).name +
-            '<span class="badge badge-pill float-right">Cantonal Data</span>';
+            cantons.find(c => c.id == dashcoch.state.daily_canton).name;
 
         chart.series[0].update({
+            type: suffix.includes('diff') ? 'column' : 'area',
             name: dashcoch.state.daily_canton,
-            data: data[dashcoch.state.daily_variable_select][dashcoch.state.daily_canton + getSuffix()]
+            data: data[dashcoch.state.daily_variable_select][dashcoch.state.daily_canton + suffix]
         });
 
         chart.yAxis[0].axisTitle.attr({
@@ -160,12 +163,12 @@ import initCantonComparison from './canton-comparison.js';
         let rowYesterday = getRow(data[dashcoch.state.daily_variable_select], getTargetCoutryDate(1));
         let rowLastWeek = getRow(data[dashcoch.state.daily_variable_select], getTargetCoutryDate(7));
         let series_data = [];
+        let suffix = getSuffix();
 
-        for (let i = 0; i < cantons.length; i++) {
-            let canton = cantons[i].id;
-            if (canton === 'CH') continue;
-            let property = canton + getSuffix();
-            series_data.push([canton, rowToday[property], rowYesterday[property], rowLastWeek[property]]);
+        for (const canton of cantons) {
+            if (canton.id === 'CH') continue;
+            let property = canton.id + suffix;
+            series_data.push([canton.id, rowToday[property], rowYesterday[property], rowLastWeek[property]]);
         }
 
         chart.series[0].update({
@@ -200,11 +203,63 @@ import initCantonComparison from './canton-comparison.js';
         dashcoch.updateCantonComparison();
     });
 
+    function initSummaries() {
+        initSummary('summary-today', 'Today',
+            getField(data.cases, getTargetCoutryDate(), 'CH_diff'),
+            getField(data.fatalities, getTargetCoutryDate(), 'CH_diff'),
+            getField(data.hospitalizedTotal, getTargetCoutryDate(), 'CH_diff'),
+            getReportingRegions(), 26
+        );
+
+        initSummary('summary-yesterday', 'Yesterday',
+            getField(data.cases, getTargetCoutryDate(1), 'CH_diff'),
+            getField(data.fatalities, getTargetCoutryDate(1), 'CH_diff'),
+            getField(data.hospitalizedTotal, getTargetCoutryDate(1), 'CH_diff'),
+            getReportingRegions(1), 26
+        );
+
+        initSummary('summary-last-week', 'Same Day Last Week',
+            getField(data.cases, getTargetCoutryDate(7), 'CH_diff'),
+            getField(data.fatalities, getTargetCoutryDate(7), 'CH_diff'),
+            getField(data.hospitalizedTotal, getTargetCoutryDate(7), 'CH_diff'),
+            getReportingRegions(7), 26
+        );
+
+        let weeklyCases = backwardsResample(data.cases.CH_diff, 7, 2)
+        let weeklyFatalities = backwardsResample(data.fatalities.CH_diff, 7, 2)
+        let weeklyHospitalizations = backwardsResample(data.hospitalizedTotal.CH_diff, 7, 2)
+
+        initSummary('summary-week', 'Last 7 Days Averages',
+            weeklyCases[1][1],
+            weeklyFatalities[1][1],
+            weeklyHospitalizations[1][1]
+        );
+
+        initSummary('summary-previous-week', 'Previous 7 Days Averages',
+            weeklyCases[0][1],
+            weeklyFatalities[0][1],
+            weeklyHospitalizations[0][1]
+        );
+    }
+
     function getSuffix() {
         let suffix = '_diff';
         if (dashcoch.state.daily_total) suffix = '';
         if (dashcoch.state.daily_per_capita) suffix += '_pc'
         return suffix;
+    }
+
+    function getReportingRegions(daysAgo = 0) {
+        // Assuming that cantons that report cases report all other variables
+        // same time as well
+        let row = getRow(data.cases, getTargetCoutryDate(daysAgo));
+        let reported = [];
+
+        for (const [key, value] of Object.entries(row))
+            if (key.endsWith('_diff') && value !== null && key.slice(0, 2) !== 'CH')
+                reported.push(key.slice(0, 2));
+
+        return reported;
     }
 
     function saveState() {

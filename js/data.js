@@ -1,4 +1,4 @@
-import { readCSV, forwardFill, multiplyColumn, where, setIndex, groupBy } from './helpers.js'
+import { readCSV, forwardFill, multiplyColumn, where, groupBy } from './helpers.js'
 import { cantons } from './cantons.js'
 
 async function getCases() {
@@ -9,12 +9,13 @@ async function getCases() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 
@@ -29,12 +30,13 @@ async function getFatalities() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 
@@ -49,12 +51,13 @@ async function getHospitalized() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 
@@ -69,12 +72,13 @@ async function getICU() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 
@@ -89,12 +93,13 @@ async function getVent() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 
@@ -109,12 +114,13 @@ async function getHospitalizedTotal() {
     for (let i = 0; i < cantons.length; i++) {
         let canton = cantons[i]['id'];
         df[canton] = forwardFill(df[canton]);
+        df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
     }
 
     // Multiply per capity columns to get per 10,000 values
     Object.keys(df).forEach(function (key, index) {
         if (key.includes('_pc')) {
-            df[key] = multiplyColumn(df[key], 10000);
+            df[key] = multiplyColumn(df[key], 100000);
         }
     });
 

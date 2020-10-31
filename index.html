@@ -47,11 +47,36 @@
         <div class="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-0">
+                                <div class="d-flex">
+                                    <div id="summary-today" class="flex-fill p-10"></div>
+                                    <div id="summary-yesterday" class="flex-fill p-10"></div>
+                                    <div id="summary-last-week" class="flex-fill p-10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-0">
+                                <div class="d-flex">
+                                    <div id="summary-week" class="flex-fill p-10"></div>
+                                    <div id="summary-previous-week" class="flex-fill p-10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Today's Data<span
-                                        class="badge badge-pill float-right">Cantonal Data</span></h2>
+                                <h2 class="content-title">Today's Data</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-pill m-10">Cantonal Data</span>
+                                </div>
                                 <form class="mw-full h-50 mb-0">
                                     <div class="form-group">
                                         <div class="input-group">
@@ -94,6 +119,9 @@
                         <div class="card p-0 m-5">
                             <div class="content m-10">
                                 <h2 id="daily-canton-title" class="content-title">Switzerland</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-pill m-10">Cantonal Data</span>
+                                </div>
                                 <div id="daily" class="h-500"></div>
                             </div>
                         </div>
@@ -103,17 +131,22 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 id="age-sex-dist-title" class="content-title">Age and Sex Distribution</h2>
-                                <div id="age-sex-dist"></div>
+                                <h2 class="content-title">Compared to Other Cantons</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-pill m-10">Cantonal Data</span>
+                                </div>
+                                <div id="canton-comparison"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Compared to Other Cantons<span
-                                        class="badge badge-pill float-right">Cantonal Data</span></h2>
-                                <div id="canton-comparison"></div>
+                                <h2 id="age-sex-dist-title" class="content-title">Age and Sex Distribution</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10">FOPH Data</span>
+                                </div>
+                                <div id="age-sex-dist"></div>
                             </div>
                         </div>
                     </div>
@@ -122,8 +155,10 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Test Positivity Rate<span
-                                        class="badge badge-secondary badge-pill float-right">FOPH Data</span></h2>
+                                <h2 class="content-title">Test Positivity test-positivity-rate</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10">FOPH Data</span>
+                                </div>
                                 <div id="test-positivity-rate"></div>
                             </div>
                         </div>
@@ -131,8 +166,10 @@
                     <div class="col-lg-6">
                         <div class="card p-0 m-5">
                             <div class="content m-10">
-                                <h2 class="content-title">Number of Tests<span
-                                        class="badge badge-secondary badge-pill float-right">FOPH Data</span></h2>
+                                <h2 class="content-title">Number of Tests</h2>
+                                <div class="position-absolute bottom-0 bottom-sm-auto top-sm-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10">FOPH Data</span>
+                                </div>
                                 <div id="number-of-tests"></div>
                             </div>
                         </div>
@@ -153,6 +190,7 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://code.highcharts.com/modules/boost-canvas.js"></script>
     <script src="https://code.highcharts.com/modules/boost.js"></script>
+    <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
     <link href="css/highcharts.theme.css" rel="stylesheet" />
 
     <!-- Moment js -->

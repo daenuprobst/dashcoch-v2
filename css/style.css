@@ -2,3 +2,7 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+#summary-today .font-size-20, #summary-yesterday .font-size-20, #summary-last-week .font-size-20, #summary-week .font-size-20, #summary-previous-week .font-size-20 {
+    color: #f95d6a;
+}

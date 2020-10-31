@@ -18,6 +18,21 @@ export default function initDaily(container, extremesChangeCallback) {
                 borderWidth: 0,
                 pointPadding: 0.0,
                 color: '#f95d6a'
+            },
+            area: {
+                color: '#f95d6a',
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, '#f95d6aaa'],
+                        [1, '#f95d6a22']
+                    ]
+                },
             }
         },
         boost: {
@@ -35,7 +50,8 @@ export default function initDaily(container, extremesChangeCallback) {
                 setExtremes: function (e) {
                     extremesChangeCallback(e);
                 }
-            }
+            },
+            crosshair: true
         },
         yAxis: {
             title: {
