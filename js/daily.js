@@ -85,6 +85,21 @@ export default function initDaily(container, extremesChangeCallback) {
             inputEnabled: false,
             selected: 0,
         },
+        // responsive: {
+        //     rules: [{
+        //         condition: {
+        //             maxWidth: 460
+        //         },
+        //         chartOptions: {
+        //             navigator: {
+        //                 enabled: false
+        //             },
+        //             scrollbar: {
+        //                 enabled: false
+        //             },
+        //         }
+        //     }]
+        // },
         series: [{}]
     });
 }

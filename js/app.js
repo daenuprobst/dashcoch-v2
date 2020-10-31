@@ -7,6 +7,7 @@ import initTestPositivityRate from './test-positivity-rate.js';
 import initNumberOfTests from './number-of-tests.js';
 import initAgeSexDist from './age-sex-dist.js';
 import initCantonComparison from './canton-comparison.js';
+import initHeatmap from './heatmap.js'
 import initSummary from './summary.js'
 
 (function (window) {
@@ -59,6 +60,9 @@ import initSummary from './summary.js'
 
             initCantonComparison('canton-comparison', cantons.map(canton => canton.id));
             dashcoch.updateCantonComparison();
+
+            initHeatmap('heatmap', cantons.filter(e => e.id !== 'CH').map(e => e.id));
+            dashcoch.updateHeatmap();
         });
     }
 
@@ -178,6 +182,24 @@ import initSummary from './summary.js'
         chart.redraw();
     }
 
+    dashcoch.updateHeatmap = function () {
+        let chart = getChart('heatmap');
+        let series_data = [];
+
+        let i = 0;
+        for (const canton of cantons) {
+            if (canton.id === 'CH') continue;
+            let property = canton.id + '_diff_pc';
+            series_data = series_data.concat(data.cases[property].map(v => [v[0], i, v[1]]));
+            i++;
+        }
+        chart.series[0].update({
+            name: 'Cases',
+            data: series_data
+        });
+        chart.redraw();
+    }
+
     // Select the daily variable
     document.getElementById('daily-variable-select').addEventListener('change', event => {
         dashcoch.state.daily_variable_select = event.target.value;
@@ -216,13 +238,6 @@ import initSummary from './summary.js'
             getField(data.fatalities, getTargetCoutryDate(1), 'CH_diff'),
             getField(data.hospitalizedTotal, getTargetCoutryDate(1), 'CH_diff'),
             getReportingRegions(1), 26
-        );
-
-        initSummary('summary-last-week', 'Same Day Last Week',
-            getField(data.cases, getTargetCoutryDate(7), 'CH_diff'),
-            getField(data.fatalities, getTargetCoutryDate(7), 'CH_diff'),
-            getField(data.hospitalizedTotal, getTargetCoutryDate(7), 'CH_diff'),
-            getReportingRegions(7), 26
         );
 
         let weeklyCases = backwardsResample(data.cases.CH_diff, 7, 2)
