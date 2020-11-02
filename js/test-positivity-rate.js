@@ -9,6 +9,12 @@ export default function initTestPositivityRate(container) {
                 }
             }
         },
+        navigator: {
+            enabled: false
+        },
+        scrollbar: {
+            enabled: false
+        },
         credits: {
             enabled: false
         },

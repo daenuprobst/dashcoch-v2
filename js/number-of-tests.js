@@ -10,6 +10,12 @@ export default function initNumberOfTests(container) {
                 }
             }
         },
+        navigator: {
+            enabled: false
+        },
+        scrollbar: {
+            enabled: false
+        },
         colors: [
             '#003f5c',
             '#f95d6a',

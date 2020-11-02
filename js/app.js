@@ -9,6 +9,7 @@ import initAgeSexDist from './age-sex-dist.js';
 import initCantonComparison from './canton-comparison.js';
 import initHeatmap from './heatmap.js'
 import initSummary from './summary.js'
+import divergent from './cm-divergent.js'
 
 (function (window) {
     'use strict';
@@ -22,8 +23,11 @@ import initSummary from './summary.js'
     window.dashcoch = {}
     window.dashcoch.state = JSON.parse(localStorage.getItem('state')) ||
     {
-        daily_variable_select: 'cases', daily_canton: 'CH',
-        daily_total: false, daily_per_capita: false
+        daily_canton: 'CH',
+        daily_variable_select: 'cases',
+        daily_total: false, daily_per_capita: false,
+        heatmap_variable_select: 'cases',
+        heatmap_total: false, heatmap_per_capita: true
     };
 
     function init() {
@@ -34,7 +38,7 @@ import initSummary from './summary.js'
 
             initDaily('daily', e => {
                 // Range selector changed
-                console.log(e);
+                // console.log(e);
             });
             dashcoch.updateDaily();
 
@@ -63,6 +67,9 @@ import initSummary from './summary.js'
 
             initHeatmap('heatmap', cantons.filter(e => e.id !== 'CH').map(e => e.id));
             dashcoch.updateHeatmap();
+
+            initHeatmap('heatmap-age-sex', Object.keys(data.ageSexDist.CH[1]), 1, false, 'linear');
+            dashcoch.updateHeatmapAgeSex();
         });
     }
 
@@ -143,7 +150,7 @@ import initSummary from './summary.js'
     dashcoch.updateDaily = function () {
         let title = document.getElementById('daily-canton-title');
         let chart = getChart('daily');
-        let suffix = getSuffix();
+        let suffix = getDailySuffix();
 
         title.innerHTML = daily_y_axis[dashcoch.state.daily_variable_select] + ' in ' +
             cantons.find(c => c.id == dashcoch.state.daily_canton).name;
@@ -167,7 +174,7 @@ import initSummary from './summary.js'
         let rowYesterday = getRow(data[dashcoch.state.daily_variable_select], getTargetCoutryDate(1));
         let rowLastWeek = getRow(data[dashcoch.state.daily_variable_select], getTargetCoutryDate(7));
         let series_data = [];
-        let suffix = getSuffix();
+        let suffix = getDailySuffix();
 
         for (const canton of cantons) {
             if (canton.id === 'CH') continue;
@@ -183,16 +190,43 @@ import initSummary from './summary.js'
     }
 
     dashcoch.updateHeatmap = function () {
+        // This is a bit hacky, as there is currently no way to use nice diverging color
+        // scales in Highcharts heatmaps... Weird.
+        let tmp = dashcoch.state.heatmap_variable_select;
+        if (tmp.includes('hosp') || tmp.includes('icu') || tmp.includes('vent')) {
+            dashcoch.state.heatmap_total = true;
+            document.getElementById('heatmap-total-toggle').checked = true;
+        }
+
         let chart = getChart('heatmap');
         let series_data = [];
+        let suffix = getHeatmapSuffix();
 
         let i = 0;
         for (const canton of cantons) {
             if (canton.id === 'CH') continue;
-            let property = canton.id + '_diff_pc';
-            series_data = series_data.concat(data.cases[property].map(v => [v[0], i, v[1]]));
+            series_data = series_data.concat(data[dashcoch.state.heatmap_variable_select][canton.id + suffix].map(v => [v[0], i, v[1]]));
             i++;
         }
+        chart.series[0].update({
+            name: 'Cases',
+            data: series_data
+        });
+        chart.redraw();
+    }
+
+    dashcoch.updateHeatmapAgeSex = function () {
+        let chart = getChart('heatmap-age-sex');
+        let series_data = [];
+
+        let i = 0;
+        for (const [key_age, value_age] of Object.entries(data.ageSexDateDist['CH'][1])) {
+            for (const [key_date, value_date] of Object.entries(value_age)) {
+                series_data.push([parseFloat(key_date), i, value_date['cases']])
+            }
+            i++;
+        }
+
         chart.series[0].update({
             name: 'Cases',
             data: series_data
@@ -208,21 +242,31 @@ import initSummary from './summary.js'
         dashcoch.updateAgeSexDist();
         dashcoch.updateCantonComparison();
     });
-
-    // Whether to display daily change or cumulative values
     document.getElementById('daily-total-toggle').addEventListener('change', event => {
         dashcoch.state.daily_total = event.target.checked;
         dashcoch.updateDaily();
         dashcoch.updateMap();
         dashcoch.updateCantonComparison();
     });
-
-    // Whether to display daily date per-capita
     document.getElementById('daily-per-capita-toggle').addEventListener('change', event => {
         dashcoch.state.daily_per_capita = event.target.checked;
         dashcoch.updateDaily();
         dashcoch.updateMap();
         dashcoch.updateCantonComparison();
+    });
+
+    // Select the heatmap variable
+    document.getElementById('heatmap-variable-select').addEventListener('change', event => {
+        dashcoch.state.heatmap_variable_select = event.target.value;
+        dashcoch.updateHeatmap();
+    });
+    document.getElementById('heatmap-total-toggle').addEventListener('change', event => {
+        dashcoch.state.heatmap_total = event.target.checked;
+        dashcoch.updateHeatmap();
+    });
+    document.getElementById('heatmap-per-capita-toggle').addEventListener('change', event => {
+        dashcoch.state.heatmap_per_capita = event.target.checked;
+        dashcoch.updateHeatmap();
     });
 
     function initSummaries() {
@@ -257,10 +301,17 @@ import initSummary from './summary.js'
         );
     }
 
-    function getSuffix() {
+    function getDailySuffix() {
         let suffix = '_diff';
         if (dashcoch.state.daily_total) suffix = '';
         if (dashcoch.state.daily_per_capita) suffix += '_pc'
+        return suffix;
+    }
+
+    function getHeatmapSuffix() {
+        let suffix = '_diff';
+        if (dashcoch.state.heatmap_total) suffix = '';
+        if (dashcoch.state.heatmap_per_capita) suffix += '_pc'
         return suffix;
     }
 

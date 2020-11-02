@@ -18,6 +18,7 @@ export default function initCantonComparison(container, categories) {
         },
         yAxis: {
             min: 0,
+            opposite: true,
             title: {
                 text: 'Cases per 100 000 Inhabitants'
             },

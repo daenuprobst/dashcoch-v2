@@ -120,7 +120,9 @@ function multiplyColumn(column, scalar) {
     let newColumn = column.slice();
 
     for (let i = 0; i < newColumn.length; i++) {
-        newColumn[i][1] = newColumn[i][1] * scalar;
+        if (newColumn[i][1] !== null) {
+            newColumn[i][1] = newColumn[i][1] * scalar;
+        }
     }
 
     return newColumn;

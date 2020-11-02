@@ -10,6 +10,12 @@ export default function initDaily(container, extremesChangeCallback) {
                 }
             }
         },
+        navigator: {
+            enabled: false
+        },
+        scrollbar: {
+            enabled: false
+        },
         credits: {
             enabled: false
         },

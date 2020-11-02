@@ -149,7 +149,17 @@ async function getAgeSexDist() {
         ]), ['sex', 'age_group'], 'sum');
     }
 
-    return data;
+    let dataByDate = {};
+    for (const canton of cantons) {
+        dataByDate[canton.id] = groupBy(where(df, [
+            ['canton', e => e === canton.id],
+            ['age_group', e => {
+                return e !== 'Unbekannt'
+            }]
+        ]), ['sex', 'age_group', 'date'], 'sum');
+    }
+
+    return [data, dataByDate];
 }
 
 async function getLastUpdated() {
@@ -195,7 +205,8 @@ async function getData() {
         icu: results[4],
         vent: results[5],
         testPositivityRate: results[6],
-        ageSexDist: results[7],
+        ageSexDist: results[7][0],
+        ageSexDateDist: results[7][1],
         lastUpdated: results[8]
     }
 }

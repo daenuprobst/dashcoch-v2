@@ -82,3 +82,29 @@
   stroke: var(--dm-base-body-bg-color);
   stroke-width: 1px;
 }
+
+/* .highcharts-range-selector-buttons */
+
+.highcharts-button text {
+  fill: #aaaaaa !important;
+}
+
+.highcharts-button .highcharts-button-box {
+  fill: rgba(255, 255, 255, .05);
+}
+
+.highcharts-button-hover .highcharts-button-box {
+  fill: rgba(255, 255, 255, 0.25);
+}
+
+.highcharts-button-hover text {
+  fill: #ffffff !important;
+}
+
+.highcharts-button-pressed .highcharts-button-box {
+  fill: rgba(255, 255, 255, 0.25);
+}
+
+.highcharts-button-pressed text {
+  fill: #ffffff !important;
+}

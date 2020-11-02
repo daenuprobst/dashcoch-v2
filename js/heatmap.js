@@ -1,8 +1,35 @@
-export default function (container, categories) {
+import turbo from './cm-turbo.js'
+
+export default function (container, categories, colsize=24 * 36e5, reverseYAxis=true, xAxisType='datetime') {
     Highcharts.chart(container, {
         chart: {
             type: 'heatmap',
+            height: 500,
             zoomType: 'x',
+            resetZoomButton: {
+                position: {
+                    align: 'left',
+                    x: 5,
+                    y: 5
+                }
+            }
+        },
+        rangeSelector: {
+            enabled: true,
+            buttons: [{
+                type: 'month',
+                count: 1,
+                text: '1m'
+            }, {
+                type: 'month',
+                count: 3,
+                text: '3m'
+            }, {
+                type: 'all',
+                text: 'All'
+            }],
+            inputEnabled: false,
+            selected: 1,
         },
         boost: {
             useGPUTranslations: true
@@ -14,34 +41,27 @@ export default function (container, categories) {
             enabled: false
         },
         legend: {
-            enabled: false,
+            enabled: true,
         },
         plotOptions: {
             series: {
                 boostThreshold: 100,
                 borderWidth: 0,
-                nullColor: '#000000',
-                colsize: 24 * 36e5, // one day
+                nullColor: '#191c20',
+                colsize: colsize,
                 turboThreshold: Number.MAX_VALUE // #3404, remove after 4.0.5 release
             },
         },
         tooltip: {
             formatter: function () {
-                return categories[this.point.y] + '<br />';
+                return '<b>' + categories[this.point.y] + '</b><br />' +
+                    (xAxisType === 'datetme' ? moment(this.point.x).format('LL') : moment().day('Monday').week(this.point.x)).format('LL') + '<br />' +
+                    (Math.round(this.point.value * 100) / 100);
             }
         },
         xAxis: {
-            type: 'datetime',
-            // min: Date.UTC(2017, 0, 1),
-            // max: Date.UTC(2017, 11, 31, 23, 59, 59),
-            // labels: {
-            //     align: 'left',
-            //     x: 5,
-            //     y: 14,
-            //     format: '{value:%B}' // long month
-            // },
-            // showLastLabel: false,
-            // tickLength: 16
+            type: xAxisType,
+            title: { text: 'Date' }
         },
 
         yAxis: {
@@ -49,27 +69,17 @@ export default function (container, categories) {
             title: {
                 text: null
             },
+            opposite: true,
             minPadding: 0,
             maxPadding: 0,
             startOnTick: false,
             endOnTick: false,
             tickWidth: 0,
-            reversed: true
+            reversed: reverseYAxis
         },
 
         colorAxis: {
-            stops: [
-                [0, '#003f5c'],
-                [0.5, '#f95d6a'],
-                [1.0, '#ffa600']
-            ],
-            // min: -15,
-            // max: 25,
-            // startOnTick: false,
-            // endOnTick: false,
-            // labels: {
-            //     format: '{value}℃'
-            // }
+            stops: turbo,
         },
 
         series: [{}]
