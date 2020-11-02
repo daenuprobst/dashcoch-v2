@@ -14,23 +14,6 @@ export default function (container, categories) {
                 }
             }
         },
-        rangeSelector: {
-            enabled: true,
-            buttons: [{
-                type: 'month',
-                count: 1,
-                text: '1m'
-            }, {
-                type: 'month',
-                count: 3,
-                text: '3m'
-            }, {
-                type: 'all',
-                text: 'All'
-            }],
-            inputEnabled: false,
-            selected: 1,
-        },
         boost: {
             useGPUTranslations: true
         },
@@ -48,20 +31,18 @@ export default function (container, categories) {
                 boostThreshold: 100,
                 borderWidth: 0,
                 nullColor: '#191c20',
-                colsize: 24 * 36e5,
                 turboThreshold: Number.MAX_VALUE // #3404, remove after 4.0.5 release
             },
         },
         tooltip: {
             formatter: function () {
                 return '<b>' + categories[this.point.y] + '</b><br />' +
-                    moment(this.point.x).format('LL') + '<br />' +
+                    moment().day('Monday').week(this.point.x).format('LL') + '<br />' +
                     (Math.round(this.point.value * 100) / 100);
             }
         },
         xAxis: {
-            type: 'datetime',
-            title: { text: 'Date' }
+            title: { text: 'Week' }
         },
 
         yAxis: {
@@ -75,7 +56,7 @@ export default function (container, categories) {
             startOnTick: false,
             endOnTick: false,
             tickWidth: 0,
-            reversed: true
+            reversed: false
         },
 
         colorAxis: {

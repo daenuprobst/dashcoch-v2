@@ -7,9 +7,9 @@ import initTestPositivityRate from './test-positivity-rate.js';
 import initNumberOfTests from './number-of-tests.js';
 import initAgeSexDist from './age-sex-dist.js';
 import initCantonComparison from './canton-comparison.js';
-import initHeatmap from './heatmap.js'
-import initSummary from './summary.js'
-import divergent from './cm-divergent.js'
+import initHeatmap from './heatmap.js';
+import initHeatmapAgeSex from './heatmap-age-sex.js';
+import initSummary from './summary.js';
 
 (function (window) {
     'use strict';
@@ -27,7 +27,8 @@ import divergent from './cm-divergent.js'
         daily_variable_select: 'cases',
         daily_total: false, daily_per_capita: false,
         heatmap_variable_select: 'cases',
-        heatmap_total: false, heatmap_per_capita: true
+        heatmap_total: false, heatmap_per_capita: true,
+        heatmap_sex_select: 1
     };
 
     function init() {
@@ -68,7 +69,7 @@ import divergent from './cm-divergent.js'
             initHeatmap('heatmap', cantons.filter(e => e.id !== 'CH').map(e => e.id));
             dashcoch.updateHeatmap();
 
-            initHeatmap('heatmap-age-sex', Object.keys(data.ageSexDist.CH[1]), 1, false, 'linear');
+            initHeatmapAgeSex('heatmap-age-sex', Object.keys(data.ageSexDist.CH[1]));
             dashcoch.updateHeatmapAgeSex();
         });
     }
@@ -220,7 +221,7 @@ import divergent from './cm-divergent.js'
         let series_data = [];
 
         let i = 0;
-        for (const [key_age, value_age] of Object.entries(data.ageSexDateDist['CH'][1])) {
+        for (const [key_age, value_age] of Object.entries(data.ageSexDateDist['CH'][dashcoch.state.heatmap_sex_select])) {
             for (const [key_date, value_date] of Object.entries(value_age)) {
                 series_data.push([parseFloat(key_date), i, value_date['cases']])
             }
@@ -267,6 +268,12 @@ import divergent from './cm-divergent.js'
     document.getElementById('heatmap-per-capita-toggle').addEventListener('change', event => {
         dashcoch.state.heatmap_per_capita = event.target.checked;
         dashcoch.updateHeatmap();
+    });
+
+    // Heatmap age sex
+    document.getElementById('heatmap-sex-select').addEventListener('change', event => {
+        dashcoch.state.heatmap_sex_select = event.target.value;
+        dashcoch.updateHeatmapAgeSex();
     });
 
     function initSummaries() {
