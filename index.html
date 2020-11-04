@@ -232,24 +232,27 @@
                                 <form class="mw-full h-50 mb-0">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <select class="form-control" id="heatmap-sex-select">
-                                                <option value="" selected="selected" disabled="disabled">Select a
-                                                    variable
-                                                </option>
-                                                <option value="1" selected="Selected">Male</option>
+                                            <select class="form-control" id="heatmap-age-sex-select">
+                                                <option value="" disabled="disabled">Select sex</option>
+                                                <option value="1" selected="selected">Male</option>
                                                 <option value="2">Female</option>
                                             </select>
-                                            <!-- <select class="form-control" id="heatmap-sex-select">
-                                                <option value="" selected="selected" disabled="disabled">Select a
+                                            <select class="form-control ml-5" id="heatmap-age-canton-select">
+                                                <option value="" disabled="disabled">Select a
+                                                    region
+                                                </option>
+                                            </select>
+                                            <select class="form-control ml-5" id="heatmap-age-variable-select">
+                                                <option value="" disabled="disabled">Select a
                                                     variable
                                                 </option>
-                                                <option value="1" selected="Selected">Male</option>
-                                                <option value="2">Female</option>
-                                            </select> -->
+                                                <option value="cases" selected="selected">Cases</option>
+                                                <option value="fatalities">Fatalities</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </form> 
-                                <div id="heatmap-age-sex"></div>
+                                </form>
+                                <div id="heatmap-age"></div>
                             </div>
                         </div>
                     </div>

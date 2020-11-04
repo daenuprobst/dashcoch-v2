@@ -8,7 +8,7 @@ import initNumberOfTests from './number-of-tests.js';
 import initAgeSexDist from './age-sex-dist.js';
 import initCantonComparison from './canton-comparison.js';
 import initHeatmap from './heatmap.js';
-import initHeatmapAgeSex from './heatmap-age-sex.js';
+import initHeatmapAge from './heatmap-age.js';
 import initSummary from './summary.js';
 
 (function (window) {
@@ -28,7 +28,8 @@ import initSummary from './summary.js';
         daily_total: false, daily_per_capita: false,
         heatmap_variable_select: 'cases',
         heatmap_total: false, heatmap_per_capita: true,
-        heatmap_sex_select: 1
+        heatmap_age_sex_select: 1, heatmap_age_canton_select: 'CH',
+        heatmap_age_variable_select: 'cases'
     };
 
     function init() {
@@ -69,8 +70,8 @@ import initSummary from './summary.js';
             initHeatmap('heatmap', cantons.filter(e => e.id !== 'CH').map(e => e.id));
             dashcoch.updateHeatmap();
 
-            initHeatmapAgeSex('heatmap-age-sex', Object.keys(data.ageSexDist.CH[1]));
-            dashcoch.updateHeatmapAgeSex();
+            initHeatmapAge('heatmap-age', Object.keys(data.ageSexDist.CH[1]));
+            dashcoch.updateHeatmapAge();
         });
     }
 
@@ -216,14 +217,14 @@ import initSummary from './summary.js';
         chart.redraw();
     }
 
-    dashcoch.updateHeatmapAgeSex = function () {
-        let chart = getChart('heatmap-age-sex');
+    dashcoch.updateHeatmapAge = function () {
+        let chart = getChart('heatmap-age');
         let series_data = [];
-
         let i = 0;
-        for (const [key_age, value_age] of Object.entries(data.ageSexDateDist['CH'][dashcoch.state.heatmap_sex_select])) {
+
+        for (const [key_age, value_age] of Object.entries(data.ageSexDateDist[dashcoch.state.heatmap_age_canton_select][dashcoch.state.heatmap_age_sex_select])) {
             for (const [key_date, value_date] of Object.entries(value_age)) {
-                series_data.push([parseFloat(key_date), i, value_date['cases']])
+                series_data.push([parseFloat(key_date), i, value_date[dashcoch.state.heatmap_age_variable_select]]);
             }
             i++;
         }
@@ -271,9 +272,24 @@ import initSummary from './summary.js';
     });
 
     // Heatmap age sex
-    document.getElementById('heatmap-sex-select').addEventListener('change', event => {
-        dashcoch.state.heatmap_sex_select = event.target.value;
-        dashcoch.updateHeatmapAgeSex();
+    document.getElementById('heatmap-age-sex-select').addEventListener('change', event => {
+        dashcoch.state.heatmap_age_sex_select = event.target.value;
+        dashcoch.updateHeatmapAge();
+    });
+
+    // Init canton select
+    let heatmapCantonSelect = document.getElementById('heatmap-age-canton-select');
+    for (const canton of cantons) {
+        heatmapCantonSelect.appendChild(element('option', { value: canton.id }, canton.name))
+    }
+    heatmapCantonSelect.addEventListener('change', event => {
+        dashcoch.state.heatmap_age_canton_select = event.target.value;
+        dashcoch.updateHeatmapAge();
+    });
+
+    document.getElementById('heatmap-age-variable-select').addEventListener('change', event => {
+        dashcoch.state.heatmap_age_variable_select = event.target.value;
+        dashcoch.updateHeatmapAge();
     });
 
     function initSummaries() {
