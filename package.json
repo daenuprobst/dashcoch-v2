@@ -1,0 +1,23 @@
+{
+  "name": "dashcoch-v2",
+  "version": "1.0.0",
+  "description": "A simple, backend-less JavaScript dashboard to show COVID informatino for Switzerland.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daenuprobst/dashcoch-v2.git"
+  },
+  "author": "Daniel Probst",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daenuprobst/dashcoch-v2/issues"
+  },
+  "homepage": "https://github.com/daenuprobst/dashcoch-v2#readme",
+  "devDependencies": {
+    "eslint": "^7.13.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}

@@ -2,72 +2,80 @@ export default function initTestPositivityRate(container) {
     Highcharts.stockChart(container, {
         chart: {
             animation: false,
-            zoomType: 'x',
+            zoomType: "x",
             // spacing: [0, 0, 0, 0],
             events: {
-                load: function () {
-                }
-            }
+                load: function () {},
+            },
         },
         navigator: {
-            enabled: false
+            enabled: false,
         },
         scrollbar: {
-            enabled: false
+            enabled: false,
         },
         credits: {
-            enabled: false
+            enabled: false,
         },
         plotOptions: {
             series: {
-                color: '#f95d6a',
-                grouping: false
-            }
+                color: "#f95d6a",
+                grouping: false,
+            },
         },
         boost: {
             enabled: true,
         },
         title: {
-            text: ''
+            text: "",
         },
         xAxis: {
             title: {
-                text: 'Date'
+                text: _dc.t("test_positivity_rate.x_axis"),
             },
-            type: 'datetime'
+            type: "datetime",
         },
         yAxis: {
             title: {
-                text: 'Positive Tests [%]'
+                text: _dc.t("test_positivity_rate.y_axis"),
             },
             labels: {
                 style: {
-                    color: '#ffffff',
-                    textOutline: '2px contrast'
-                }
+                    color: "#ffffff",
+                    textOutline: "2px contrast",
+                },
             },
             showFirstLabel: false,
-            gridLineColor: '#262626',
+            gridLineColor: "#262626",
         },
         legend: {
             enabled: false,
         },
         rangeSelector: {
-            buttons: [{
-                type: 'month',
-                count: 1,
-                text: '1m'
-            }, {
-                type: 'month',
-                count: 3,
-                text: '3m'
-            }, {
-                type: 'all',
-                text: 'All'
-            }],
+            buttons: [
+                {
+                    type: "month",
+                    count: 1,
+                    text: "1m",
+                },
+                {
+                    type: "month",
+                    count: 3,
+                    text: "3m",
+                },
+                {
+                    type: "all",
+                    text: "All",
+                },
+            ],
             inputEnabled: false,
             selected: 0,
         },
-        series: [{}]
+        tooltip: {
+            formatter: function () {
+                return `${Math.round(100 * this.y) / 100}%`;
+            },
+        },
+        series: [{}],
     });
 }

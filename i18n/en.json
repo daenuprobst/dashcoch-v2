@@ -1,0 +1,173 @@
+{
+    "title": "COVID-19 Information for Switzerland",
+    "cantonal_data": "Cantonal Data",
+    "foph_data": "FOPH Data",
+    "owin_data": "OWIN Data",
+    "cantons": {
+        "CH": "Schweiz / Suisse / Svizzera / Svizra",
+        "AG": "Aargau",
+        "AI": "Appenzell Innerrhoden",
+        "AR": "Appenzell Ausserrhoden",
+        "BE": "Bern",
+        "BL": "Basel-Landschaft",
+        "BS": "Basel-Stadt",
+        "FR": "Fribourg",
+        "GE": "Genève",
+        "GL": "Glarus",
+        "GR": "Grischun",
+        "JU": "Jura",
+        "LU": "Luzern",
+        "NE": "Neuchâtel",
+        "NW": "Nidwalden",
+        "OW": "Obwalden",
+        "SG": "St. Gallen",
+        "SH": "Schaffhausen",
+        "SO": "Solothurn",
+        "SZ": "Schwyz",
+        "TG": "Thurgau",
+        "TI": "Ticino",
+        "UR": "Uri",
+        "VD": "Vaud",
+        "VS": "Valais",
+        "ZG": "Zug",
+        "ZH": "Zürich"
+    },
+    "countries": {
+        "Switzerland": "Schweiz",
+        "Germany": "Deutschland",
+        "Norway": "Norwegen",
+        "Sweden": "Schweden",
+        "United States": "USA",
+        "Austria": "Österreich",
+        "France": "Frankreich",
+        "Italy": "Italien"
+    },
+    "summary": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "previous_7_days_avarage": "Previous 7 Days (Average)",
+        "last_7_days_avarage": "Last 7 Days (Average)",
+        "cases": "cases",
+        "fatalities": "fatalities",
+        "hospitalizations": "hospitalizations"
+    },
+    "map": {
+        "title": "Today's Data",
+        "select": {
+            "message": "Select a Variable",
+            "cases": "Cases",
+            "fatalities": "Fatalities",
+            "hospitalizations_all": "Hospitalizations (All)",
+            "hospitalizations_normal": "Hospitalizations (Normal)",
+            "hospitalizations_icu": "Hospitalizations (ICU)",
+            "hospitalizations_vent": "Hospitalizations (Ventialted)"
+        },
+        "total": "Total",
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "same_day_last_week": "Same Day Last Week"
+    },
+    "daily": {
+        "title": {
+            "cases": "Cases in",
+            "fatalities": "Fatalities in",
+            "hospitalizedTotal": "Hospitalizations (All) in",
+            "hospitalized": "Hospitalizations (Normal) in",
+            "icu": "Hospitalizations (ICU) in",
+            "vent": "Hospitalizations (Venitalted) in"
+        },
+        "x_axis": "Date",
+        "y_axis": {
+            "cases": "Cases",
+            "fatalities": "Fatalities",
+            "hospitalizedTotal": "Hospitalizations (All)",
+            "hospitalized": "Hospitalizations (Normal)",
+            "icu": "Hospitalizations (ICU)",
+            "vent": "Hospitalizations (Venitalted)"
+        }
+    },
+    "canton_comparison": {
+        "title": "Compared to Other Cantons",
+        "y_axis": {
+            "cases": "Cases per 100 000 Inhabitants",
+            "fatalities": "Fatalities",
+            "hospitalizedTotal": "Hospitalizations (All) per 100 000 Inhabitants",
+            "hospitalized": "Hospitalizations (Normal) per 100 000 Inhabitants",
+            "icu": "Hospitalizations (ICU) per 100 000 Inhabitants",
+            "vent": "Hospitalizations (Venitalted) per 100 000 Inhabitants"
+        }
+    },
+    "age_sex_dist": {
+        "title": {
+            "cases": "Cases in",
+            "fatalities": "Fatalities in",
+            "hospitalizedTotal": "Hospitalizations (All) in",
+            "hospitalized": "Hospitalizations (Normal) in",
+            "icu": "Hospitalizations (ICU) in",
+            "vent": "Hospitalizations (Venitalted) in"
+        },
+        "male": "Male",
+        "female": "Female"
+    },
+    "test_positivity_rate": {
+        "title": "Percentage of Positive Tests",
+        "x_axis": "Date",
+        "y_axis": "Positive Tests [%]"
+    },
+    "number_of_tests": {
+        "title": "Number of Tests",
+        "x_axis": "Date",
+        "y_axis": "Number of Tests",
+        "number_of_positive_tests": "Number of Positive Tests",
+        "number_of_negative_tests": "Number of Negative Tests"
+    },
+    "heatmap": {
+        "title": "Daily Cantonal Data Comparison",
+        "select": {
+            "message": "Select a Variable",
+            "cases": "Cases",
+            "fatalities": "Fatalities",
+            "hospitalizations_all": "Hospitalizations (All)",
+            "hospitalizations_normal": "Hospitalizations (Normal)",
+            "hospitalizations_icu": "Hospitalizations (ICU)",
+            "hospitalizations_vent": "Hospitalizations (Ventialted)"
+        },
+        "per_capita": "Per 100 000",
+        "total": "Total"
+    },
+    "heatmap_age": {
+        "title": "Weekly Cantonal Data by Age and Sex",
+        "select_sex": {
+            "message": "Select Sex",
+            "male": "Male",
+            "female": "Female"
+        },
+        "select_region": {
+            "message": "Select a Region"
+        },
+        "select": {
+            "message": "Select a Variable",
+            "cases": "Cases",
+            "fatalities": "Fatalities"
+        }
+    },
+    "mobility": {
+        "title": "Google Mobility Data",
+        "select": {
+            "message": "Select a Variable",
+            "retail_recreation": "Retail and Recreation",
+            "grocery_pharmacy": "Grocery and Pharmacy",
+            "parks": "Parks",
+            "residential": "Residential",
+            "transit_stations": "Transit Stations",
+            "workplaces": "Workplaces"
+        },
+        "x_axis": "Date",
+        "y_axis": "Deviation from Baseline [%]"
+    },
+    "excess_mortality": {
+        "title": "Excess Mortality Data",
+        "x_axis": "Date",
+        "y_axis": "Difference to 2015-2019 Mean [%]"
+    }
+}
