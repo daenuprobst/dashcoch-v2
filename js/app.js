@@ -118,6 +118,7 @@ import config from './config.js';
         _dc.updateExcessMortality();
 
         _dc.translator.translatePageTo(_dc.s.language);
+        document.getElementById('loader').classList.add('d-none');
       });
     });
   }
