@@ -39,50 +39,6 @@ import config from './config.js';
     cantonal_mobility_variable_select: 'retail_and_recreation',
   };
 
-  const cantonalComparisonBarChart = new BarChart(
-      'canton-comparison',
-      {
-        tooltip: {
-          nullFormat: 'No data available',
-          formatter: function() {
-            return `<b>${_dc.t('cantons.' + this.points[0].key)}</b><br />
-                          ${Math.round(100 * this.points[0].y) / 100}`;
-          },
-        },
-        rangeSelector: {enabled: false},
-      }, () => {
-        const rowToday = getRow(
-            data[_dc.s.daily_variable_select],
-            getTargetCoutryDate(),
-        );
-        const seriesData = [];
-        const seriesColor = [];
-
-        for (const canton of cantons) {
-          seriesData.push([canton.id, rowToday[canton.id + '_pc']]);
-          if (canton.id === _dc.s.daily_canton) {
-            seriesColor.push('#2fad94');
-          } else {
-            seriesColor.push('#f95d6a');
-          }
-        }
-
-        return [{
-          id: 'comparison',
-          name: '',
-          data: seriesData,
-          colorByPoint: true,
-          colors: seriesColor,
-        }];
-      }, () => {
-        return {
-          yAxis: {title: {text: _dc.t('canton_comparison.y_axis.' +
-                  _dc.s.daily_variable_select),
-          }},
-        };
-      },
-  );
-
   function init() {
     getData().then((dfs) => {
       i18n().then(([translator, language]) => {
@@ -107,7 +63,7 @@ import config from './config.js';
               _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
                   document.getElementById('daily-canton-title'));
               _dc.ageSexDistBarChart.update();
-              cantonalComparisonBarChart.update().updateChart();
+              _dc.cantonalComparisonBarChart.update().updateChart();
             },
             '/assets/ch.geojson',
         );
@@ -122,8 +78,6 @@ import config from './config.js';
         _dc.dailyAdaptiveChart.init();
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
-
-        cantonalComparisonBarChart.init().update().updateChart();
 
         const ageCategories = [
           '0 – 9', '10 – 19', '20 – 29', '30 – 39',
@@ -200,10 +154,51 @@ import config from './config.js';
                 },
               ];
             },
-            () => {
-
-            },
         ).init().update();
+
+        _dc.cantonalComparisonBarChart = new BarChart(
+            'canton-comparison',
+            {
+              tooltip: {
+                nullFormat: 'No data available',
+                formatter: function() {
+                  return `<b>${_dc.t('cantons.' + this.points[0].key)}</b><br />
+                          ${Math.round(100 * this.points[0].y) / 100}`;
+                },
+              },
+              rangeSelector: {enabled: false},
+            }, () => {
+              const rowToday = getRow(
+                  data[_dc.s.daily_variable_select],
+                  getTargetCoutryDate(),
+              );
+              const seriesData = [];
+              const seriesColor = [];
+
+              for (const canton of cantons) {
+                seriesData.push([canton.id, rowToday[canton.id + '_pc']]);
+                if (canton.id === _dc.s.daily_canton) {
+                  seriesColor.push('#2fad94');
+                } else {
+                  seriesColor.push('#f95d6a');
+                }
+              }
+
+              return [{
+                id: 'comparison',
+                name: '',
+                data: seriesData,
+                colorByPoint: true,
+                colors: seriesColor,
+              }];
+            }, () => {
+              return {
+                yAxis: {title: {text: _dc.t('canton_comparison.y_axis.' +
+                  _dc.s.daily_variable_select),
+                }},
+              };
+            },
+        ).init().update().updateChart();
 
         _dc.testPositivityRateLineChart = new LineChart(
             'test-positivity-rate',
@@ -562,7 +557,7 @@ import config from './config.js';
             document.getElementById('daily-canton-title'));
         _dc.choropleth.update(_dc.s, _dc.data);
         _dc.ageSexDistBarChart.update();
-        cantonalComparisonBarChart.update().updateChart();
+        _dc.cantonalComparisonBarChart.update().updateChart();
       });
   document
       .getElementById('daily-total-toggle')
@@ -571,7 +566,7 @@ import config from './config.js';
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
         _dc.choropleth.update(_dc.s, _dc.data);
-        cantonalComparisonBarChart.update().updateChart();
+        _dc.cantonalComparisonBarChart.update().updateChart();
       });
   document
       .getElementById('daily-per-capita-toggle')
@@ -580,7 +575,7 @@ import config from './config.js';
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
         _dc.choropleth.update(_dc.s, _dc.data);
-        cantonalComparisonBarChart.update().updateChart();
+        _dc.cantonalComparisonBarChart.update().updateChart();
       });
 
   // Select the heatmap variable
