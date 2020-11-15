@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8" />
+    <title data-i18n="title">COVID-19 Info</title>
+    <meta name="description" content="" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="viewport" content="width=device-width" />
+
+    <meta property="og:title" content="COVID-19 Info Switzerland" />
+    <meta property="og:description" content="Latest updates of COVID-19 development in Switzerland" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.corona-data.ch" />
+    <meta property="og:image" content="https://www.corona-data.ch/embed-social-414x414.jpg" />
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png" />
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous" />
+
+    <!-- Halfmoon CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body id="top" class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars"
+    data-set-preferred-mode-onload="true">
+    <div id="outdated-browser">
+        <div>
+            corona-data.ch was recently updated and due to time constraints I was not able to support old web browsers. Please update your web browser to access the new site and to make sure that your computer is well protected.<br /><br />
+            corona-data.ch wurde vor kurzem aktualisiert und ist, wegen dem damit verbundenen Zeitaufwand, für veraltete Browser wie Internet Explorer nicht mehr verfügbar. Bitte aktualisiere deinen Browser damit du auf die neue Seite zugreifen kannst und auch sonst sicher im Internet unterwegs bist.
+        </div>
+    </div>
+    <div id="loader">
+        <div class="loader"></div>
+        <div class="loading-msg">Loading</div>
+    </div>
+    <div class="page-wrapper with-navbar">
+        <div class="sticky-alerts"></div>
+        <nav class="navbar">
+            <a href="#" class="navbar-brand" data-i18n="title">
+                COVID-19 Info Switzerland
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown with-arrow">
+                    <a class="nav-link" data-toggle="dropdown" id="nav-link-dropdown-toggle">
+                        <span>Language</span>
+                        <i class="fa fa-angle-down ml-5" aria-hidden="true"></i>
+                    </a>
+                    <div id="languages" class="dropdown-menu dropdown-menu-right"
+                        aria-labelledby="nav-link-dropdown-toggle">
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-primary m-5" role="alert">
+                            <button class="close" data-dismiss="alert" type="button" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="alert-heading" data-i18n="message_title">Welcome to the New Corona Data</h4>
+                            <span data-i18n="message_content">
+                                I have been working on this fresh version of Corona Data for a few weekends and finally
+                                got around to release it. It integrates data from the cantons, the FOPH, and from
+                                international sources. Clicking on a canton now reveals detailed and historical
+                                information for the selected canton. At the end of the page you will find Google
+                                mobility data as well as excess mortality data for Switzerland and other countries.
+                                Corona Data stays of course free, open source, and entirely and decidedly
+                                non-profit.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-0">
+                                <div class="d-flex">
+                                    <div id="summary-yesterday" class="flex-fill p-10"></div>
+                                    <div id="summary-today" class="flex-fill p-10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-0">
+                                <div class="d-flex">
+                                    <div id="summary-previous-week" class="flex-fill p-10"></div>
+                                    <div id="summary-week" class="flex-fill p-10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="map.title">
+                                    Today's Data
+                                </h2>
+                                <div class="text-secondary text-truncate font-size-12 mb-5" data-i18n="map.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-pill m-10" data-i18n="cantonal_data">Cantonal Data</span>
+                                </div>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="daily-variable-select">
+                                                <option value="" selected="selected" disabled="disabled"
+                                                    data-i18n="map.select.message">
+                                                    Select a variable
+                                                </option>
+                                                <option value="cases" selected="Selected" data-i18n="map.select.cases">
+                                                    Cases
+                                                </option>
+                                                <option value="fatalities" data-i18n="map.select.fatalities">
+                                                    Fatalities
+                                                </option>
+                                                <option value="hospitalizedTotal"
+                                                    data-i18n="map.select.hospitalizations_all">
+                                                    Hospitalizations (All)
+                                                </option>
+                                                <option value="hospitalized"
+                                                    data-i18n="map.select.hospitalizations_normal">
+                                                    Hospitalizations
+                                                    (Normal)
+                                                </option>
+                                                <option value="icu" data-i18n="map.select.hospitalizations_icu">
+                                                    Hospitalizations (ICU)
+                                                </option>
+                                                <option value="vent" data-i18n="map.select.hospitalizations_vent">
+                                                    Hospitalizations
+                                                    (Ventilated)
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block mr-10">
+                                                        <input type="checkbox" id="daily-total-toggle" value="total" />
+                                                        <label for="daily-total-toggle">Total</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-append" style="display: none">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block">
+                                                        <input type="checkbox" id="daily-per-capita-toggle"
+                                                            value="per-capita" />
+                                                        <label for="daily-per-capita-toggle">Per
+                                                            Capita</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="map" class="h-350 h-lg-450"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 id="daily-canton-title" class="content-title">
+                                    Switzerland
+                                </h2>
+                                <div class="text-secondary font-size-12 text-truncate mb-5" data-i18n="daily.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-pill m-10" data-i18n="cantonal_data">Cantonal Data</span>
+                                </div>
+                                <div id="daily" class="h-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 id="age-sex-dist-title" class="content-title">
+                                    Age and Sex Distribution
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="foph_data">FOPH
+                                        Data</span>
+                                </div>
+                                <div id="age-sex-dist"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="canton_comparison.title">
+                                    Compared to Other Cantons
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-pill m-10" data-i18n="cantonal_data">Cantonal Data</span>
+                                </div>
+                                <div id="canton-comparison"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Not yet ... -->
+                <!--
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="cantonal_mobility.title">
+                                    Cantonal Google Mobility Data
+                                </h2>
+                                <div class="text-secondary font-size-12 mb-5" data-i18n="cantonal_mobility.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="cantonal-mobility-variable-select">
+                                                <option value="" disabled="disabled"
+                                                    data-i18n="cantonal_mobility.select.message">
+                                                    Select variable
+                                                </option>
+                                                <option value="retail_and_recreation" selected="selected"
+                                                    data-i18n="cantonal_mobility.select.retail_recreation">
+                                                    Retail and Recreation
+                                                </option>
+                                                <option value="grocery_and_pharmacy"
+                                                    data-i18n="cantonal_mobility.select.grocery_pharmacy">
+                                                    Grocery and Pharmacy
+                                                </option>
+                                                <option value="parks" data-i18n="cantonal_mobility.select.parks">
+                                                    Parks
+                                                </option>
+                                                <option value="residential" data-i18n="cantonal_mobility.select.residential">
+                                                    Residential
+                                                </option>
+                                                <option value="transit_stations"
+                                                    data-i18n="cantonal_mobility.select.transit_stations">
+                                                    Transit Stations
+                                                </option>
+                                                <option value="workplaces" data-i18n="cantonal_mobility.select.workplaces">
+                                                    Workplaces
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="cantonal-mobility" class="h-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="heatmap.title">
+                                    Daily Cantonal Data
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-pill m-10" data-i18n="cantonal_data">Cantonal Data</span>
+                                </div>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="heatmap-variable-select">
+                                                <option value="" selected="selected" disabled="disabled"
+                                                    data-i18n="heatmap.select.message">
+                                                    Select a variable
+                                                </option>
+                                                <option value="cases" selected="Selected"
+                                                    data-i18n="heatmap.select.cases">
+                                                    Cases
+                                                </option>
+                                                <option value="fatalities" data-i18n="heatmap.select.fatalities">
+                                                    Fatalities
+                                                </option>
+                                                <option value="hospitalizedTotal"
+                                                    data-i18n="heatmap.select.hospitalizations_all">
+                                                    Hospitalizations (All)
+                                                </option>
+                                                <option value="hospitalized"
+                                                    data-i18n="heatmap.select.hospitalizations_normal">
+                                                    Hospitalizations
+                                                    (Normal)
+                                                </option>
+                                                <option value="icu" data-i18n="heatmap.select.hospitalizations_icu">
+                                                    Hospitalizations (ICU)
+                                                </option>
+                                                <option value="vent" data-i18n="heatmap.select.hospitalizations_vent">
+                                                    Hospitalizations
+                                                    (Ventilated)
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block">
+                                                        <input type="checkbox" id="heatmap-per-capita-toggle"
+                                                            value="per-capita" checked />
+                                                        <label for="heatmap-per-capita-toggle"
+                                                            data-i18n="heatmap.per_capita">Per
+                                                            Capita</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <div class="custom-switch d-inline-block mr-10">
+                                                        <input type="checkbox" id="heatmap-total-toggle"
+                                                            value="total" />
+                                                        <label for="heatmap-total-toggle"
+                                                            data-i18n="heatmap.total">Total</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="heatmap"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="heatmap_age.title">
+                                    Weekly Age and Sex Data
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="foph_data">FOPH
+                                        Data</span>
+                                </div>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="heatmap-age-sex-select">
+                                                <option value="" disabled="disabled"
+                                                    data-i18n="heatmap_age.select_sex.message">
+                                                    Select sex
+                                                </option>
+                                                <option value="1" selected="selected"
+                                                    data-i18n="heatmap_age.select_sex.male">
+                                                    Male
+                                                </option>
+                                                <option value="2" data-i18n="heatmap_age.select_sex.female">
+                                                    Female
+                                                </option>
+                                            </select>
+                                            <select class="form-control ml-5" id="heatmap-age-canton-select">
+                                                <option value="" disabled="disabled"
+                                                    data-i18n="heatmap_age.select_region.message">
+                                                    Select a region
+                                                </option>
+                                            </select>
+                                            <select class="form-control ml-5" id="heatmap-age-variable-select">
+                                                <option value="" disabled="disabled"
+                                                    data-i18n="heatmap_age.select.message">
+                                                    Select a variable
+                                                </option>
+                                                <option value="cases" selected="selected"
+                                                    data-i18n="heatmap_age.select.cases">
+                                                    Cases
+                                                </option>
+                                                <option value="fatalities" data-i18n="heatmap_age.select.fatalities">
+                                                    Fatalities
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="heatmap-age"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h1 class="font-size-22 p-10 mb-0" data-i18n="testing_data">Testing Data (Switzerland)</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="test_positivity_rate.title">
+                                    Percentage of Positive Tests
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="foph_data">FOPH
+                                        Data</span>
+                                </div>
+                                <div id="test-positivity-rate"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="number_of_tests.title">
+                                    Number of Tests
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="foph_data">FOPH
+                                        Data</span>
+                                </div>
+                                <div id="number-of-tests"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h1 class="font-size-22 p-10 mb-0" data-i18n="international_data">International Data</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="number_positivity_tests.title">
+                                    Number of Tests and Test Positivity
+                                </h2>
+                                <div class="text-secondary font-size-12 mb-5" data-i18n="number_positivity_tests.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <div id="number-positivity-tests"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="gdp_stringency.title">
+                                    Per-papita GDP, Stringency, and per-capita Daily Cases
+                                </h2>
+                                <div class="text-secondary font-size-12 mb-5" data-i18n="gdp_stringency.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <div id="gdp-stringency"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="mobility.title">
+                                    Google Mobility Data
+                                </h2>
+                                <div class="text-secondary font-size-12 mb-5" data-i18n="mobility.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <form class="mw-full h-50 mb-0">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="mobility-variable-select">
+                                                <option value="" disabled="disabled"
+                                                    data-i18n="mobility.select.message">
+                                                    Select variable
+                                                </option>
+                                                <option value="retail_and_recreation" selected="selected"
+                                                    data-i18n="mobility.select.retail_recreation">
+                                                    Retail and Recreation
+                                                </option>
+                                                <option value="grocery_and_pharmacy"
+                                                    data-i18n="mobility.select.grocery_pharmacy">
+                                                    Grocery and Pharmacy
+                                                </option>
+                                                <option value="parks" data-i18n="mobility.select.parks">
+                                                    Parks
+                                                </option>
+                                                <option value="residential" data-i18n="mobility.select.residential">
+                                                    Residential
+                                                </option>
+                                                <option value="transit_stations"
+                                                    data-i18n="mobility.select.transit_stations">
+                                                    Transit Stations
+                                                </option>
+                                                <option value="workplaces" data-i18n="mobility.select.workplaces">
+                                                    Workplaces
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="mobility" class="h-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="excess_mortality.title">
+                                    Excess Mortality Data
+                                </h2>
+                                <div class="text-secondary font-size-12 mb-5" data-i18n="excess_mortality.info"></div>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <div id="excess-mortality" class="h-550"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="cases_by_country.title">
+                                    Cases by Country
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <div class="h-450 overflow-y-scroll">
+                                    <table class="table table-striped sortable font-size-12">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th data-i18n="cases_by_country.country">Country</th>
+                                                <th data-i18n="cases_by_country.date">Date</th>
+                                                <th class="text-right" data-i18n="cases_by_country.cases_per_million">
+                                                    Cases per Million</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cases_per_million_ranking">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-0 m-5">
+                            <div class="content m-5 m-md-10">
+                                <h2 class="content-title" data-i18n="fatalities_by_country.title">
+                                    Fatalities by Country
+                                </h2>
+                                <div class="position-absolute top-0 right-0">
+                                    <span class="badge badge-secondary badge-pill m-10" data-i18n="owid_data">OWID
+                                        Data</span>
+                                </div>
+                                <div class="h-450 overflow-y-scroll">
+                                    <table class="table table-striped sortable font-size-12">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th data-i18n="fatalities_by_country.country">Country</th>
+                                                <th data-i18n="fatalities_by_country.date">Date</th>
+                                                <th class="text-right"
+                                                    data-i18n="fatalities_by_country.fatalities_per_million">Fatalities
+                                                    per Million</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fatalities_per_million_ranking">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="custom-footer">
+                <div class="container-fluid">
+                    <div class="row row-eq-spacing-lg">
+                        <div class="col-lg-3">
+                            <div class="content">
+                                <h4 class="content-title font-size-16 mb-10" data-i18n="data_sources">Data Sources</h4>
+                                <div>
+                                    <a href="https://github.com/openZH/covid_19" class="custom-footer-link">OpenZH</a>
+                                </div>
+                                <div>
+                                    <a href="https://github.com/daenuprobst/covid19-cases-switzerland"
+                                        class="custom-footer-link">My GitHub Repo</a>
+                                </div>
+                                <div>
+                                    <a href="https://github.com/owid/covid-19-data" class="custom-footer-link">Our World
+                                        in Data</a>
+                                </div>
+                                <div>
+                                    <a href="https://www.bag.admin.ch/bag/de/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov/situation-schweiz-und-international.html"
+                                        class="custom-footer-link">FPOH</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="content">
+                                <h4 class="content-title font-size-16 mb-10" data-i18n="more_info">More Info</h4>
+                                <div>
+                                    <a href="https://ncs-tf.ch" class="custom-footer-link">Swiss Natoional COVID-19
+                                        Science Taskforce</a>
+                                </div>
+                                <div>
+                                    <a href="https://icumonitoring.ch/" class="custom-footer-link">ICU Monitoring</a>
+                                </div>
+                                <div>
+                                    <a href="https://nextstrain.org/" class="custom-footer-link">Nextstrain</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="content">
+                                <h4 class="content-title font-size-16 mb-10" data-i18n="analytics">Analytics</h4>
+                                <div>
+                                    <a href="https://simpleanalytics.com/corona-data.ch?ref=corona-data.ch"
+                                        class="custom-footer-link">Corona-Data Visitors</a>
+                                </div>
+                                <div>
+                                    <a href="https://simpleanalytics.com/?ref=corona-data.ch"
+                                        class="custom-footer-link">Simple Analytics</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="content">
+                                <h4 class="content-title font-size-16 mb-10">Made by <a
+                                        href="https://twitter.com/skepteis" class="custom-footer-link">@skepteis</a>
+                                    with <i class="fa fa-heart text-danger ml-5 mr-5" aria-hidden="true"></i> for
+                                    everyone, for free
+                                </h4>
+
+                                <div class="text-muted">
+                                    &#x1F12F; Copyleft 2020, Humanity
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check ES6 support -->
+    <script>
+        try {
+            new Function('(a = 0) => a');
+        }
+        catch (err) {
+            document.getElementById('outdated-browser').style.display = 'block';
+            throw new Error("Please update your browser.");
+        }
+    </script>
+
+    <!-- i18n -->
+    <script src="https://unpkg.com/@andreasremdt/simple-translator@latest/dist/umd/translator.min.js"></script>
+
+    <!-- Halfmoon JS -->
+    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+
+    <!-- Highcharts-->
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/boost-canvas.js"></script>
+    <script src="https://code.highcharts.com/modules/boost.js"></script>
+    <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
+    <link href="css/highcharts.theme.css" rel="stylesheet" />
+
+    <!-- Moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"
+        integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-10-year-range.js"
+        integrity="sha512-fv+Ujl3Bw7MVRNHQwMwNe2+MAOGDGEIAeFK/yapP2ieJCVrxnFWUtglgNavPuQ9GrT4kotETO9UfQZRJTu15rQ=="
+        crossorigin="anonymous"></script>
+
+    <!-- Sorting tables -->
+    <script src="js/sortable.js"></script>
+
+    <script src="https://stefanhaustein.github.io/notemplate/src/notemplate.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""/></noscript>
+</body>
+
+</html>
