@@ -1,6 +1,6 @@
 export default {
   availableLanguages: ['de', 'fr', 'it', 'en', 'es', 'pt',
-    'sr', 'hr', 'sq', 'tr', 'ta', 'ar'],
+    'sr', 'hr', 'sq', 'tr', 'ta', 'ar', 'ca'],
   countries: {
     colors: {
       'Switzerland': '#ffa600',

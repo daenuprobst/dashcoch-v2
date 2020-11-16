@@ -1,9 +1,9 @@
 {
     "title": "COVID-19 Info Schweiz",
     "message_title": "Willkommen auf dem neuen Corona-Data",
-    "message_content": "Ich habe ein paar Wochenenden an dieser neuen Version von Corona-Data gearbeitet und bin endlich dazu gekommen, sie zu veröffentlichen. Die Seite integriert Daten aus den Kantonen, dem FOPH und aus internationalen Quellen. Durch Klicken auf einen Kanton werden detaillierte und historische Informationen für den ausgewählten Kanton angezeigt. Am Ende der Seite findest du Google Mobility Daten sowie Daten zur Übersterblichkeit für die Schweiz und andere Länder. Corona Data bleibt natürlich kostenlos, Open Source und völlig und entschieden gemeinnützig.",
+    "message_content": "Ich habe ein paar Wochenenden an dieser neuen Version von Corona-Data gearbeitet und bin endlich dazu gekommen, sie zu veröffentlichen. Die Seite integriert Daten aus den Kantonen, dem BAG und aus internationalen Quellen. Durch Klicken auf einen Kanton werden detaillierte und historische Informationen für den ausgewählten Kanton angezeigt. Am Ende der Seite findest du Google Mobility Daten sowie Daten zur Übersterblichkeit für die Schweiz und andere Länder. Corona Data bleibt natürlich kostenlos, Open Source und völlig und entschieden gemeinnützig.",
     "cantonal_data": "Kantonale Daten",
-    "foph_data": "BAG Daten",
+    "BAG_data": "BAG Daten",
     "owin_data": "OWIN Daten",
     "testing_data": "Daten zum Testing (Schweiz)",
     "international_data": "Internationale Daten im Vergleich",
@@ -145,7 +145,7 @@
             "hospitalizations_all": "Hospitalisierungen (Alle)",
             "hospitalizations_normal": "Hospitalisierungen (Normal)",
             "hospitalizations_icu": "Hospitalisierungen (Intensiv)",
-            "hospitalizations_vent": "Krankenhausaufenthalte (belüftet)"
+            "hospitalizations_vent": "Krankenhausaufenthalte (Beatmet)"
         },
         "per_capita": "Pro 100 000",
         "total": "Total"

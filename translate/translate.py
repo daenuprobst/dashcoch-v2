@@ -3,15 +3,27 @@ import json
 from pathlib import Path
 import click
 from googletrans import Translator
+from translate import Translator as AltTranslator
 
 T = Translator()
 
-def google_translate(str, source_language, target_language):
-    while True:
+def alt_translate(str, source_language, target_language):
+    # quick and hacky
+    translator = AltTranslator(from_lang=source_language, to_lang=target_language)
+    return translator.translate(str)
+
+def google_translate(str, source_language, target_language, max_tries=10):
+    try_n = 0
+
+    while try_n < max_tries:
         try:
+            try_n += 1
             return T.translate(str, src=source_language, dest=target_language).text
         except:
             time.sleep(2)
+    
+    return alt_translate(str, source_language, target_language)
+
 
 def translate_json(j, source_language, target_language):
     for key, value in j.items():
