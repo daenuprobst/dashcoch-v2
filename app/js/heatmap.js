@@ -75,10 +75,6 @@ export default class Heatmap extends ChartBase {
       yAxis: {
         type: 'category',
         opposite: true,
-        minPadding: 0,
-        maxPadding: 0,
-        startOnTick: false,
-        endOnTick: false,
         tickWidth: 0,
         reversed: true,
         labels: {
@@ -86,7 +82,6 @@ export default class Heatmap extends ChartBase {
             color: '#ffffff',
             textOutline: '2px contrast',
           },
-          y: 25,
         },
         gridLineColor: '#262626',
       },

@@ -255,6 +255,7 @@ import config from './config.js';
                 categories: cantons.filter(
                     (e) => e.id !== 'CH',
                 ).map((e) => e.id),
+                labels: { style: {fontSize: '9px'}}
               },
               tooltip: {
                 formatter: function() {
