@@ -70,7 +70,12 @@ export default class Choropleth {
             },
             dataLabels: {
               enabled: true,
-              format: '{point.value}',
+              useHTML: false,
+              // format: '{point.value}',
+              formatter: function() {
+                console.log(this);
+                return `${this.point.id}: ${this.point.value}`;
+              },
               nullFormat: '-',
               allowOverlap: true,
               align: 'center',
