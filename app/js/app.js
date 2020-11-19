@@ -118,7 +118,7 @@ import config from './config.js';
               if (!['cases', 'fatalities'].includes(
                   _dc.s.daily_variable_select,
               )) {
-                return [{data: []}, {data: []}];
+                return [{id: 'male', data: []}, {id: 'female', data: []}];
               }
 
               const maleData = Object.keys(

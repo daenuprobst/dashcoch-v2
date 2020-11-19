@@ -73,7 +73,6 @@ export default class Choropleth {
               useHTML: false,
               // format: '{point.value}',
               formatter: function() {
-                console.log(this);
                 return `${this.point.id}: ${this.point.value}`;
               },
               nullFormat: '-',
