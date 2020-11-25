@@ -50,12 +50,13 @@ import config from './config.js';
 
         initLanguages();
         initSummaries();
+        initPlayBar();
 
         _dc.choropleth = new Choropleth(
             'map',
             () => {
               // Geojson for map finished loading
-              _dc.choropleth.update(_dc.s, _dc.data);
+              _dc.choropleth.update(_dc.s, _dc.data, 0);
             },
             (canton) => {
               // Selection changed
@@ -72,7 +73,7 @@ import config from './config.js';
         _dc.dailyAdaptiveChart = new DailyAdaptiveChart(
             'daily', (date) => {
               _dc.s.daily_date = date;
-              _dc.choropleth.update(_dc.s, _dc.data);
+              _dc.choropleth.update(_dc.s, _dc.data, 0);
             },
         );
         _dc.dailyAdaptiveChart.init();
@@ -560,17 +561,61 @@ import config from './config.js';
         _dc.s.daily_variable_select = event.target.value;
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
-        _dc.choropleth.update(_dc.s, _dc.data);
+        _dc.choropleth.update(_dc.s, _dc.data, 0);
         _dc.ageSexDistBarChart.update();
         _dc.cantonalComparisonBarChart.update().updateChart();
       });
+  document
+      .getElementById('choropleth-play-pause-button')
+      .addEventListener('click', (event) => {
+        let button = document.getElementById('choropleth-play-pause-button');
+        // If the button is pressed, and we aren't currently playing, start playing
+        // otherwise, we pause.
+        if (_dc.choropleth.sequenceTimer === undefined) {
+          updateButtonToShowPause(button);
+          // Every half second we update the map to the next day.
+          _dc.choropleth.sequenceTimer = setInterval(function () {
+              let range = document.getElementById('choropleth-play-range');
+              if (parseInt(range.value) < parseInt(range.max)) {
+                const daysAgo = parseInt(range.max) - parseInt(range.value) - 1;
+                // Update the choropleth to the new day
+                _dc.choropleth.update(_dc.s, _dc.data, daysAgo);
+                // Update the play bar to the new day
+                updateTimeline(daysAgo, 
+                  document.getElementById('choropleth-play-output'));
+                // Increment time by one day
+                range.value = parseInt(range.value) + 1;
+              } else {
+                // When we have arrived at the present day: today, we pause.
+                pauseTheMap(button, _dc.choropleth);
+                // Reset the play bar.
+                range.value = range.min;
+              }
+          }, 333);
+       } else {
+          pauseTheMap(button, _dc.choropleth);
+       }
+      });
+
+  document
+      .getElementById('choropleth-play-range')
+      .addEventListener('input', (event) => {
+        let range = document.getElementById('choropleth-play-range');  
+        let daysAgo = parseInt(range.max) - parseInt(range.value) - 1;
+        // Update the choropleth to the new day
+        _dc.choropleth.update(_dc.s, _dc.data, daysAgo);
+        // Update the play bar to the new day
+        updateTimeline(daysAgo, 
+          document.getElementById('choropleth-play-output'));            
+      });
+
   document
       .getElementById('daily-total-toggle')
       .addEventListener('change', (event) => {
         _dc.s.daily_total = event.target.checked;
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
-        _dc.choropleth.update(_dc.s, _dc.data);
+        _dc.choropleth.update(_dc.s, _dc.data, 0);
         _dc.cantonalComparisonBarChart.update().updateChart();
       });
   document
@@ -579,7 +624,7 @@ import config from './config.js';
         _dc.s.daily_per_capita = event.target.checked;
         _dc.dailyAdaptiveChart.update(_dc.s, _dc.data,
             document.getElementById('daily-canton-title'));
-        _dc.choropleth.update(_dc.s, _dc.data);
+        _dc.choropleth.update(_dc.s, _dc.data, 0);
         _dc.cantonalComparisonBarChart.update().updateChart();
       });
 
@@ -689,6 +734,41 @@ import config from './config.js';
     );
   }
 
+  // Updates the play bar on the choropleth to have the date of 
+  // corresponding to the data being render daysAgo.
+  function updateTimeline(daysAgoToUpdate, timelineToUpdate) {
+    const todaysDate = new Date();
+    let displayDate = new Date(todaysDate);
+    displayDate.setDate(todaysDate.getDate() - daysAgoToUpdate);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    timelineToUpdate.innerHTML = displayDate.toLocaleDateString(
+      persistentState.language + "-CH", options);
+  }
+
+  // Changes the play bar button to be a play icon and stops the
+  // choropleth from progressing.
+  function pauseTheMap(button, choropleth) {
+    button.title = 'play';
+    button.className = 'fa fa-play';
+    clearInterval(choropleth.sequenceTimer);
+    choropleth.sequenceTimer = undefined;
+  }
+  
+  // Updates the button to have the pause icon.
+  function updateButtonToShowPause(button) {
+    button.title = 'pause';
+    button.className = 'fa fa-pause';
+  }
+
+  // Returns the number of days between today and 2020 Feb 27
+  function getDaysSinceStartOfPandemic() {
+    const todaysDate = new Date();
+    const startOfPandemic = new Date(2020, 1, 27);
+    const diffMillis = todaysDate - startOfPandemic;
+    const diffDays = Math.ceil(diffMillis / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
   function getReportingRegions(daysAgo = 0) {
     // Assuming that cantons that report cases report all other variables
     // same time as well
@@ -723,6 +803,14 @@ import config from './config.js';
         },
       }, language));
     }
+  }
+
+  // Initiatlizes the play bar to run for a maximum of n days, where n is 
+  // the number of days since the start of the pandemic and adds the 
+  // HTML corresponding to the play bar to be today's date.
+  function initPlayBar() {
+    document.getElementById('choropleth-play-range').max = getDaysSinceStartOfPandemic();
+    updateTimeline(0, document.getElementById('choropleth-play-output'));
   }
 
   function saveState() {

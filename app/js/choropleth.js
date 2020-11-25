@@ -131,27 +131,34 @@ export default class Choropleth {
 
       that.mapReadyCallback();
     });
-  }
+  };
 
-  update(state, data) {
+  update(state, data, date_offset) {
+    const maxValueForSelector = {
+      'cases': 1000,
+      'fatalities': 30,
+      'hospitalizedTotal': 50,
+      'hospitalized': 30,
+      'icu': 20,
+      'vent': 20,
+    };
     const chart = getChart(this.container);
     const rowToday = getRow(
         data[state.daily_variable_select],
-        state.daily_date,
+        getTargetCoutryDate(0 + date_offset),
     );
     const rowYesterday = getRow(
         data[state.daily_variable_select],
-        getTargetCoutryDate(1),
+        getTargetCoutryDate(1 + date_offset),
     );
     const rowLastWeek = getRow(
         data[state.daily_variable_select],
-        getTargetCoutryDate(7),
+        getTargetCoutryDate(7 + date_offset),
     );
     const seriesData = [];
     let suffix = '_diff';
     if (state.daily_total) suffix = '';
     if (state.daily_per_capita) suffix += '_pc';
-
     for (const canton of cantons) {
       if (canton.id === 'CH') continue;
       const property = canton.id + suffix;
@@ -167,6 +174,30 @@ export default class Choropleth {
       name: 'Cases',
       data: seriesData,
     });
+    // Fixes the scalebar when we play through
+    // the different dates instead of having
+    // the color bar be dynamically set.
+    if (date_offset > 0) {
+      chart.update({
+        colorAxis: {
+          stops: [
+            [0, '#003f5c'],
+            [0.5, '#f95d6a'],
+            [1.0, '#c80815'],
+          ],
+          max: maxValueForSelector[state.daily_variable_select],
+        }});
+    } else {
+      chart.update({
+        colorAxis: {
+          stops: [
+            [0, '#003f5c'],
+            [1.0, '#f95d6a'],
+          ],
+          max: null,
+        }});
+    }
     chart.redraw();
   };
 }
+
