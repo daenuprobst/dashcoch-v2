@@ -118,7 +118,7 @@ import config from './config.js';
               if (!['cases', 'fatalities'].includes(
                   _dc.s.daily_variable_select,
               )) {
-                return [{data: []}, {data: []}];
+                return [{id: 'male', data: []}, {id: 'female', data: []}];
               }
 
               const maleData = Object.keys(
@@ -511,17 +511,21 @@ import config from './config.js';
             },
             () => {
               return config.countries.excess_mortality.map((country) => {
+                let max_date = moment().subtract(4 * 7, 'days');
                 return {
                   id: country,
                   name: _dc.t('countries.' + country),
                   data: Object.keys(data.excessMortality[country])
                       .map((date) => {
-                        return [
-                          parseInt(date),
-                          data.excessMortality[country][date][
-                              'p_scores_all_ages'
-                          ],
-                        ];
+                        let date_int = parseInt(date)
+                        if (moment(date_int).isSameOrBefore(max_date)) {
+                          return [
+                            date_int,
+                            data.excessMortality[country][date][
+                                'p_scores_all_ages'
+                            ],
+                          ];
+                        }
                       }),
                   color: config.countries.colors[country],
                 };
