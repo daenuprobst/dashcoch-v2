@@ -3,16 +3,16 @@ import json
 from pathlib import Path
 import click
 from googletrans import Translator
-from translate import Translator as AltTranslator
+from google_trans_new import google_translator
 
 T = Translator()
+T_ALT = google_translator()
 
 def alt_translate(str, source_language, target_language):
     # quick and hacky
-    translator = AltTranslator(from_lang=source_language, to_lang=target_language)
-    return translator.translate(str)
+    return T_ALT.translate(str, lang_src=source_language, lang_tgt=target_language).strip()
 
-def google_translate(str, source_language, target_language, max_tries=10):
+def google_translate(str, source_language, target_language, max_tries=1):
     try_n = 0
 
     while try_n < max_tries:
@@ -43,10 +43,10 @@ def translate_existing_json(j, j_existing, source_language, target_language):
                 value_existing = j_existing[key]
             translate_existing_json(value, value_existing, source_language, target_language)
         else:
-            print(f"Translating {key}.")
             if j_existing and key in j_existing:
                 j[key] = j_existing[key]
             else:
+                print(f"Translating {key}.")
                 j[key] = google_translate(value, source_language, target_language)
 
 @click.command()

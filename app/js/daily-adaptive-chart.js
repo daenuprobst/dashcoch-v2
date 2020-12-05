@@ -1,4 +1,4 @@
-import {getTargetCoutryDate, getChart} from './helpers.js';
+import {getTargetCoutryDate, getChart, backwardsResample, roundColumn} from './helpers.js';
 
 export default class DailyAdaptiveChart {
   constructor(container, selectionChangedCallback) {
@@ -92,6 +92,9 @@ export default class DailyAdaptiveChart {
         showFirstLabel: false,
         gridLineColor: '#262626',
       },
+      tooltip: {
+        shared: true
+      },
       legend: {
         enabled: false,
       },
@@ -115,7 +118,7 @@ export default class DailyAdaptiveChart {
         inputEnabled: false,
         selected: 0,
       },
-      series: [{}],
+      series: [{}, {}],
     });
   }
 
@@ -134,6 +137,22 @@ export default class DailyAdaptiveChart {
       name: state.daily_canton,
       data: data[state.daily_variable_select][state.daily_canton + suffix],
     });
+
+    if (suffix.includes('diff')) {
+      chart.series[1].update({
+        type: 'line',
+        dashStyle: 'longdash',
+        label: '',
+        color: '#ffffff',
+        marker: { enabled: false },
+        name: _dc.t('daily.seven_day_avg') + ' ' + state.daily_canton,
+        data: roundColumn(backwardsResample(data[state.daily_variable_select][state.daily_canton + suffix], 7, 1, false), 3),
+      });
+    } else {
+      chart.series[1].update({
+        data: []
+      })
+    }
 
     chart.yAxis[0].axisTitle.attr({
       text: _dc.t('daily.y_axis.' + state.daily_variable_select),

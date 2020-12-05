@@ -108,16 +108,20 @@ function forwardFill(column) {
   return newColumn;
 }
 
-function backwardsResample(column, windowSize = 7, n = null) {
+function backwardsResample(column, windowSize = 7, samplingInterval = 7, countIndex=true, n = null) {
   let k = 0;
   const newColumn = [];
 
-  for (let i = column.length - 1; i >= windowSize; i -= windowSize) {
+  for (let i = column.length - 1; i >= windowSize; i -= samplingInterval) {
     let sum = 0;
     for (let j = 0; j < windowSize; j++) {
       sum += column[i - j][1];
     }
-    newColumn.push([k++, sum / windowSize]);
+    if (countIndex) {
+      newColumn.push([k++, sum / windowSize]);
+    } else {
+      newColumn.push([column[i][0], sum / windowSize]);
+    }
     if (newColumn.length === n) {
       break;
     }
@@ -132,6 +136,19 @@ function multiplyColumn(column, scalar) {
   for (let i = 0; i < newColumn.length; i++) {
     if (newColumn[i][1] !== null) {
       newColumn[i][1] = newColumn[i][1] * scalar;
+    }
+  }
+
+  return newColumn;
+}
+
+function roundColumn(column, decimals=3) {
+  const newColumn = column.slice();
+  const exp = 10**decimals;
+
+  for (let i = 0; i < newColumn.length; i++) {
+    if (newColumn[i][1] !== null) {
+      newColumn[i][1] = Math.round(exp * newColumn[i][1]) / exp;
     }
   }
 
@@ -279,6 +296,7 @@ export {
   getField,
   forwardFill,
   multiplyColumn,
+  roundColumn,
   where,
   setIndex,
   groupBy,

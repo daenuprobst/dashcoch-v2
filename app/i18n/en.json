@@ -74,6 +74,7 @@
       "icu": "Hospitalizations (ICU) in",
       "vent": "Hospitalizations (Venitalted) in"
     },
+    "seven_day_avg": "7-Day Average",
     "x_axis": "Date",
     "y_axis": {
       "cases": "Cases",
