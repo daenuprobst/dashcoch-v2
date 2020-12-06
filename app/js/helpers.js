@@ -64,13 +64,20 @@ function getChart(container) {
   ];
 }
 
-function getTargetCoutryDate(daysAgo = 0) {
-  return Date.parse(
-      moment(new Date())
-          .subtract(daysAgo, 'day')
-          .tz('Europe/Zurich')
-          .format('YYYY-MM-DD'),
-  );
+function getTargetCoutryDate(daysAgo = 0, formatted = false, format = 'DD. MM.') {
+  if (!formatted) {
+    return Date.parse(
+        moment(new Date())
+            .subtract(daysAgo, 'day')
+            .tz('Europe/Zurich')
+            .format('YYYY-MM-DD'),
+    );
+  } else {
+    return moment(new Date())
+      .subtract(daysAgo, 'day')
+      .tz('Europe/Zurich')
+      .format(format)
+  }
 }
 
 function getRow(data, rowId) {

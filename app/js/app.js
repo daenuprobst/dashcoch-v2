@@ -642,7 +642,8 @@ import config from './config.js';
         _dc.s.mobility_variable_select = event.target.value;
         _dc.mobilityLineChart.update();
       });
-
+  
+  
   function initSummaries() {
     initSummary(
         'summary-today',
@@ -666,8 +667,8 @@ import config from './config.js';
         26,
     );
 
-    const weeklyCases = backwardsResample(data.cases.CH_diff, 7, 7, 2);
-    const weeklyFatalities = backwardsResample(data.fatalities.CH_diff, 7, 7, 2);
+    const weeklyCases = backwardsResample(data.cases.CH_diff, 7, 7, true, 2);
+    const weeklyFatalities = backwardsResample(data.fatalities.CH_diff, 7, 7, true, 2);
     const weeklyHospitalizations = backwardsResample(
         data.hospitalizedTotal.CH_diff,
         7,
@@ -677,8 +678,8 @@ import config from './config.js';
 
     initSummary(
         'summary-week',
-        'Last 7 Days (Average)',
-        'summary.last_7_days_avarage',
+        getTargetCoutryDate(6, true) + '–' + getTargetCoutryDate(0, true) + ' Ø',
+        null,
         weeklyCases[1][1],
         weeklyFatalities[1][1],
         weeklyHospitalizations[1][1],
@@ -686,8 +687,8 @@ import config from './config.js';
 
     initSummary(
         'summary-previous-week',
-        'Previous 7 Days (Average)',
-        'summary.previous_7_days_avarage',
+        getTargetCoutryDate(13, true) + '–' + getTargetCoutryDate(7, true) + ' Ø',
+        null,
         weeklyCases[0][1],
         weeklyFatalities[0][1],
         weeklyHospitalizations[0][1],
