@@ -197,12 +197,12 @@
     "y_axis": "Percentage of Positive Tests [%]",
     "info": "This plot is intended show the percentage of positive tests and the number of tests per-capita in context. Ideally, a country should be located at the bottom left, as this means that a few tests also only find a few positives. On the other hand, being located at the top right means that a lot of tests results in a high positivity rate, meaning that the outbreak is severe and there is no clear picture of the scale of the outbreak (the threshold for this was set by the WHO at 5%)."
   },
-  "gdp_stringency": {
-    "title": "Per-Capita GDP, Stringency, and Daily Cases",
-    "x_axis": "Per-Capita GDP",
+  "hdi_stringency": {
+    "title": "HDI, Stringency, and Daily Cases",
+    "x_axis": "HDI (Human Development Index",
     "y_axis": "Stringency Index",
-    "z_axis": "Daily Cases per million (7 day mean)",
-    "info": "This plot shows the per-capita GDP of a country on the horizontal, and the stringency index of a country on the vertical axis. The stringency index measures the amount and strength of the measures, such as school closures or restrictions of movement, a country takes against the pandemic. The size of each point represents the latest 7 day mean of the daily number of cases per one million inhabitants in a country."
+    "z_axis": "Daily Cases per million (7-Day Mean)",
+    "info": "This plot shows the Human Development Index (HDI) of a country on the horizontal, and the stringency index of a country on the vertical axis. The stringency index measures the amount and strength of the measures, such as school closures or restrictions of movement, a country takes against the pandemic. The size of each point represents the latest 7 day mean of the daily number of cases per one million inhabitants in a country."
   },
   "cases_by_country": {
     "title": "Cases by Country (7 day mean)",

@@ -348,14 +348,14 @@ import config from './config.js';
               yAxis: {title: {text: _dc.t('number_positivity_tests.y_axis')}},
               tooltip: {
                 formatter: function() {
-                  return `<b>${this.point.country}</b><br />
+                  return `<b>${_dc.t('countries.' + this.point.country)}</b><br />
                   Tests per 100 000: <b>${Math.round(this.point.x * 100) / 100}</b><br />
                   Test positivity: <b>${Math.round(this.point.y * 100) / 100}%</b>`;
                 },
               },
               plotOptions: {scatter: {dataLabels: {
                 formatter: function() {
-                  return `${config.number_positivity_tests.labelled_countries.includes(this.point.country) ? this.point.country : ''}`;
+                  return `${config.number_positivity_tests.labelled_countries.includes(this.point.country) ? _dc.t('countries.' + this.point.country) : ''}`;
                 },
               }}},
             },
@@ -409,29 +409,29 @@ import config from './config.js';
         _dc.testingScatter.chart.xAxis[0].setExtremes(0, 6000);
         _dc.testingScatter.chart.showResetZoom();
 
-        _dc.testingScatter = new ScatterChart(
-            'gdp-stringency',
+        _dc.hdiStringency = new ScatterChart(
+            'hdi-stringency',
             {
               chart: {type: 'bubble'},
-              xAxis: {title: {text: _dc.t('gdp_stringency.x_axis')}},
-              yAxis: {title: {text: _dc.t('gdp_stringency.y_axis')}},
+              xAxis: {title: {text: _dc.t('hdi_stringency.x_axis')}},
+              yAxis: {title: {text: _dc.t('hdi_stringency.y_axis')}},
               tooltip: {
                 formatter: function() {
-                  return `<b>${this.point.country}</b><br />
-                  ${_dc.t('gdp_stringency.x_axis')}: <b>${Math.round(this.point.x * 100) / 100}</b><br />
-                  ${_dc.t('gdp_stringency.y_axis')}: <b>${Math.round(this.point.y * 100) / 100} / 100</b><br />
-                  ${_dc.t('gdp_stringency.z_axis')}: <b>${Math.round(this.point.z * 100) / 100}</b>`;
+                  return `<b>${_dc.t('countries.' + this.point.country)}</b><br />
+                  ${_dc.t('hdi_stringency.x_axis')}: <b>${Math.round(this.point.x * 100) / 100}</b><br />
+                  ${_dc.t('hdi_stringency.y_axis')}: <b>${Math.round(this.point.y * 100) / 100} / 100</b><br />
+                  ${_dc.t('hdi_stringency.z_axis')}: <b>${Math.round(this.point.z * 100) / 100}</b>`;
                 },
               },
               plotOptions: {series: {dataLabels: {
                 align: 'center',
                 formatter: function() {
-                  return `${config.number_positivity_tests.labelled_countries.includes(this.point.country) ? this.point.country : ''}`;
+                  return `${config.number_positivity_tests.labelled_countries.includes(this.point.country) ? _dc.t('countries.' + this.point.country) : ''}`;
                 },
               }}},
             },
             () => {
-              const x = 'gdp_per_capita';
+              const x = 'human_development_index';
               const y = 'stringency_index';
               const z = 'new_cases_smoothed_per_million';
 
@@ -450,7 +450,6 @@ import config from './config.js';
                     break;
                   }
                 }
-
                 const xVal = dates[sortedDateKeys[0]][x];
                 const yVal = yLatest;
                 const zVal = dates[sortedDateKeys[0]][z];
@@ -474,6 +473,11 @@ import config from './config.js';
                 data: seriesData,
               }];
             }).init().update();
+        
+        // TODO: That's a bit hacky, should be a nice method
+        // (maybe outlier-detection)
+        _dc.hdiStringency.chart.xAxis[0].setExtremes(0.85, 0.96);
+        _dc.hdiStringency.chart.showResetZoom();
 
         _dc.mobilityLineChart = new LineChart(
             'mobility',
