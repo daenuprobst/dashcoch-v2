@@ -132,10 +132,12 @@ export default class DailyAdaptiveChart {
         'daily.title.' + state.daily_variable_select,
     )} ${_dc.t('cantons.' + state.daily_canton)}`;
 
+    let values = data[state.daily_variable_select][state.daily_canton + suffix]
+
     chart.series[0].update({
       type: suffix.includes('diff') ? 'column' : 'area',
       name: state.daily_canton,
-      data: data[state.daily_variable_select][state.daily_canton + suffix],
+      data: values,
     });
 
     if (suffix.includes('diff')) {
@@ -146,7 +148,7 @@ export default class DailyAdaptiveChart {
         color: '#ffffff',
         marker: { enabled: false },
         name: _dc.t('daily.seven_day_avg') + ' ' + state.daily_canton,
-        data: roundColumn(backwardsResample(data[state.daily_variable_select][state.daily_canton + suffix], 7, 1, false), 3),
+        data: roundColumn(backwardsResample(values.slice(0, -3), 7, 1, false), 3),
       });
     } else {
       chart.series[1].update({
