@@ -623,8 +623,11 @@ import config from './config.js';
         _dc.choropleth.update(_dc.s, _dc.data, 0);
         // Update the play bar to today
         updateTimeline(0, document.getElementById('choropleth-play-output'));
+        // If we are playing, stop playing.
+        pauseTheMap(document.getElementById('choropleth-play-pause-button'),
+            _dc.choropleth);
         // Update the play bar to reset value.
-        range.value = range.min;      
+        range.value = range.min;   
       });
 
   document
