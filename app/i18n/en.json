@@ -57,7 +57,7 @@
       "hospitalizations_all": "Hospitalizations (All)",
       "hospitalizations_normal": "Hospitalizations (Normal)",
       "hospitalizations_icu": "Hospitalizations (ICU)",
-      "hospitalizations_vent": "Hospitalizations (Ventialted)"
+      "hospitalizations_vent": "Hospitalizations (Ventilated)"
     },
     "total": "Total",
     "today": "Today",
@@ -72,7 +72,7 @@
       "hospitalizedTotal": "Hospitalizations (All) in",
       "hospitalized": "Hospitalizations (Normal) in",
       "icu": "Hospitalizations (ICU) in",
-      "vent": "Hospitalizations (Venitalted) in"
+      "vent": "Hospitalizations (Ventilated) in"
     },
     "seven_day_avg": "7-Day Average",
     "x_axis": "Date",
@@ -82,7 +82,7 @@
       "hospitalizedTotal": "Hospitalizations (All)",
       "hospitalized": "Hospitalizations (Normal)",
       "icu": "Hospitalizations (ICU)",
-      "vent": "Hospitalizations (Venitalted)"
+      "vent": "Hospitalizations (Ventilated)"
     },
     "info": "You can click on a column to show the Swiss data for that date on the map."
   },
@@ -94,7 +94,7 @@
       "hospitalizedTotal": "Hospitalizations (All) per 100 000 Inhabitants",
       "hospitalized": "Hospitalizations (Normal) per 100 000 Inhabitants",
       "icu": "Hospitalizations (ICU) per 100 000 Inhabitants",
-      "vent": "Hospitalizations (Venitalted) per 100 000 Inhabitants"
+      "vent": "Hospitalizations (Ventilated) per 100 000 Inhabitants"
     }
   },
   "age_sex_dist": {
@@ -104,7 +104,7 @@
       "hospitalizedTotal": "Hospitalizations (All) in",
       "hospitalized": "Hospitalizations (Normal) in",
       "icu": "Hospitalizations (ICU) in",
-      "vent": "Hospitalizations (Venitalted) in"
+      "vent": "Hospitalizations (Ventilated) in"
     },
     "male": "Male",
     "female": "Female"
@@ -146,7 +146,7 @@
       "hospitalizations_all": "Hospitalizations (All)",
       "hospitalizations_normal": "Hospitalizations (Normal)",
       "hospitalizations_icu": "Hospitalizations (ICU)",
-      "hospitalizations_vent": "Hospitalizations (Ventialted)"
+      "hospitalizations_vent": "Hospitalizations (Ventilated)"
     },
     "per_capita": "Per 100 000",
     "total": "Total"
