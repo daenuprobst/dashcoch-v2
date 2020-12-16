@@ -122,9 +122,21 @@
 /*Input Slider Play Controls*/
 #play-controls {
     width: 100%;
+    display: inline-flex;
+}
+#play-left-controls {
+    width: 95px;
+}
+#play-right-output { 
+    float: right;
+}
+#play-slider {
+    width: 100%;
 }
 #choropleth-play-output {
     padding-left: 15px;
+    width: 150px;
+    float:right;
 }
 #choropleth-play-pause-button {
     background-color: #50555C;
@@ -132,15 +144,21 @@
     border: 0px solid #000000;
     padding: 3px 3px 3px 3px;
 }
+#choropleth-force-today-button {
+    background-color: #50555C;
+    color: #1890ff;
+    border: 0px solid #000000;
+    padding: 3px 3px 3px 3px;   
+}
 input[type=range] {
-  margin: 10px 0;
-  width: 350px;
+    margin-top: 3px;
+    width:100%;
 }
 input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  width: 350px;
+  /*width: 350px;*/
   height: 14px;
   cursor: pointer;
   animate: 0.2s;
@@ -162,7 +180,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   background: #50555C;
 }
 input[type=range]::-moz-range-track {
-  width: 350px;
+  /*width: 350px;*/
   height: 14px;
   cursor: pointer;
   animate: 0.2s;
@@ -181,7 +199,7 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
 }
 input[type=range]::-ms-track {
-  width: 350px;
+  /*width: 350px;*/
   height: 14px;
   cursor: pointer;
   animate: 0.2s;

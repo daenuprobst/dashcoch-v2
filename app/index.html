@@ -175,9 +175,16 @@
                                 </form>
                                 <div id="map" class="h-350 h-lg-450"></div>
                                 <div id="play-controls">
-                                   <button id="choropleth-play-pause-button" class="fa fa-play" title="play"></button>
-                                   <input id="choropleth-play-range" type="range" value="0" min="0" max="300"></input>
-                                   <output id="choropleth-play-output" for="play-range" name="day">Today</output>
+                                   <div id="play-left-controls">
+                                     <button id="choropleth-force-today-button" class="fas fa-fast-forward" title="today"></button>
+                                     <button id="choropleth-play-pause-button" class="fa fa-play" title="play"></button>
+                                   </div>
+                                   <div id="play-slider">
+                                     <input id="choropleth-play-range" type="range" value="0" min="0" max="300"></input>
+                                   </div>
+                                   <div id="play-right-output">
+                                     <output id="choropleth-play-output" for="play-range" name="day">Today</output>
+                                   </div>
                                 </div>
                             </div>
                         </div>

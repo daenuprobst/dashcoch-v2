@@ -565,6 +565,7 @@ import config from './config.js';
         _dc.ageSexDistBarChart.update();
         _dc.cantonalComparisonBarChart.update().updateChart();
       });
+  // Pressing play or pause on the choropleth will play/pause map
   document
       .getElementById('choropleth-play-pause-button')
       .addEventListener('click', (event) => {
@@ -573,11 +574,11 @@ import config from './config.js';
         // otherwise, we pause.
         if (_dc.choropleth.sequenceTimer === undefined) {
           updateButtonToShowPause(button);
-          // Every half second we update the map to the next day.
+          // Every one-third second we update the map to the next day.
           _dc.choropleth.sequenceTimer = setInterval(function () {
               let range = document.getElementById('choropleth-play-range');
               if (parseInt(range.value) < parseInt(range.max)) {
-                const daysAgo = parseInt(range.max) - parseInt(range.value) - 1;
+                const daysAgo = parseInt(range.max) - parseInt(range.value);
                 // Update the choropleth to the new day
                 _dc.choropleth.update(_dc.s, _dc.data, daysAgo);
                 // Update the play bar to the new day
@@ -588,6 +589,11 @@ import config from './config.js';
               } else {
                 // When we have arrived at the present day: today, we pause.
                 pauseTheMap(button, _dc.choropleth);
+                // Update the choropleth to today
+                _dc.choropleth.update(_dc.s, _dc.data, 0);
+                // Update the play bar to today
+                updateTimeline(0, 
+                  document.getElementById('choropleth-play-output'));
                 // Reset the play bar.
                 range.value = range.min;
               }
@@ -596,17 +602,29 @@ import config from './config.js';
           pauseTheMap(button, _dc.choropleth);
        }
       });
-
+  // Dragging the input on the play bar choropleth will set the day.
   document
       .getElementById('choropleth-play-range')
       .addEventListener('input', (event) => {
         let range = document.getElementById('choropleth-play-range');  
-        let daysAgo = parseInt(range.max) - parseInt(range.value) - 1;
+        let daysAgo = parseInt(range.max) - parseInt(range.value);
         // Update the choropleth to the new day
         _dc.choropleth.update(_dc.s, _dc.data, daysAgo);
         // Update the play bar to the new day
         updateTimeline(daysAgo, 
           document.getElementById('choropleth-play-output'));            
+      });
+  // Hitting the fast forward button will push the choropleth to today.
+  document
+    .getElementById('choropleth-force-today-button')
+    .addEventListener('click', (event) => {
+        let range = document.getElementById('choropleth-play-range');  
+        // Update the choropleth to today
+        _dc.choropleth.update(_dc.s, _dc.data, 0);
+        // Update the play bar to today
+        updateTimeline(0, document.getElementById('choropleth-play-output'));
+        // Update the play bar to reset value.
+        range.value = range.min;      
       });
 
   document
@@ -741,8 +759,9 @@ import config from './config.js';
     let displayDate = new Date(todaysDate);
     displayDate.setDate(todaysDate.getDate() - daysAgoToUpdate);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const language = persistentState.language != 'none' ? persistentState.language : "en";
     timelineToUpdate.innerHTML = displayDate.toLocaleDateString(
-      persistentState.language + "-CH", options);
+      language + "-CH", options);
   }
 
   // Changes the play bar button to be a play icon and stops the
@@ -800,7 +819,7 @@ import config from './config.js';
           saveState();
           location.reload();
           return false;
-        },
+        }
       }, language));
     }
   }
