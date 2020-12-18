@@ -193,7 +193,7 @@
   },
   "number_positivity_tests": {
     "title": "Number of Tests and Test Positivity (7 day mean)",
-    "x_axis": "Number of Tests per 100 000 Inhabitants",
+    "x_axis": "Number of Tests per 1 000 000 Inhabitants",
     "y_axis": "Percentage of Positive Tests [%]",
     "info": "This plot is intended show the percentage of positive tests and the number of tests per-capita in context. Ideally, a country should be located at the bottom left, as this means that a few tests also only find a few positives. On the other hand, being located at the top right means that a lot of tests results in a high positivity rate, meaning that the outbreak is severe and there is no clear picture of the scale of the outbreak (the threshold for this was set by the WHO at 5%)."
   },
