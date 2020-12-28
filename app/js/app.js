@@ -667,13 +667,14 @@ import config from './config.js';
         26,
     );
 
-    const weeklyCases = backwardsResample(data.cases.CH_diff, 7, 7, true, 2);
-    const weeklyFatalities = backwardsResample(data.fatalities.CH_diff, 7, 7, true, 2);
+    const weeklyCases = backwardsResample(
+        data.cases.CH_diff, 7, 7, true, 2,
+    );
+    const weeklyFatalities = backwardsResample(
+        data.fatalities.CH_diff, 7, 7, true, 2,
+    );
     const weeklyHospitalizations = backwardsResample(
-        data.hospitalizedTotal.CH_diff,
-        7,
-        7,
-        2,
+        data.hospitalizedTotal.CH_diff, 7, 7, true, 2,
     );
 
     initSummary(
