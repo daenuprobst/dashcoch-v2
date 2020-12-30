@@ -3,7 +3,7 @@ import DailyAdaptiveChart from './daily-adaptive-chart.js';
 import Choropleth from './choropleth.js';
 import {cantons} from './cantons.js';
 import {
-  getRow, getField, getTargetCoutryDate, backwardsResample,
+  getRow, getField, getTargetCoutryDate, backwardsResample, dataTodayIsIncomplete,
 } from './helpers.js';
 import LineChart from './line-chart.js';
 import BarChart from './bar-chart.js';
@@ -667,31 +667,42 @@ import config from './config.js';
         26,
     );
 
-    const weeklyCases = backwardsResample(data.cases.CH_diff, 7, 7, true, 2);
-    const weeklyFatalities = backwardsResample(data.fatalities.CH_diff, 7, 7, true, 2);
+    let intv = 7;
+    let skip = 0;
+    for (const variable of ["cases", "fatalities", "hospitalizedTotal"]) {
+      if (dataTodayIsIncomplete(data[variable], "CH", "_diff")) {
+        skip++;
+        break;
+      }
+    }
+    const weeklyCases = backwardsResample(
+      data.cases.CH_diff, intv, intv, true, 2, skip,
+    );
+    const weeklyFatalities = backwardsResample(
+      data.fatalities.CH_diff, intv, intv, true, 2, skip,
+    );
     const weeklyHospitalizations = backwardsResample(
-        data.hospitalizedTotal.CH_diff,
-        7,
-        7,
-        2,
+      data.hospitalizedTotal.CH_diff, intv, intv, true, 2, skip,
     );
 
     initSummary(
-        'summary-week',
-        getTargetCoutryDate(6, true) + '–' + getTargetCoutryDate(0, true) + ' Ø',
-        null,
-        weeklyCases[1][1],
-        weeklyFatalities[1][1],
-        weeklyHospitalizations[1][1],
+      'summary-week',
+      (getTargetCoutryDate(intv + skip - 1, true) + '–'
+       + getTargetCoutryDate(skip, true) + ' Ø'),
+      null,
+      weeklyCases[1][1],
+      weeklyFatalities[1][1],
+      weeklyHospitalizations[1][1],
     );
 
     initSummary(
-        'summary-previous-week',
-        getTargetCoutryDate(13, true) + '–' + getTargetCoutryDate(7, true) + ' Ø',
-        null,
-        weeklyCases[0][1],
-        weeklyFatalities[0][1],
-        weeklyHospitalizations[0][1],
+      'summary-previous-week',
+      (getTargetCoutryDate(2 * intv + skip - 1, true) + '–'
+       + getTargetCoutryDate(intv + skip, true) + ' Ø'),
+      null,
+      weeklyCases[0][1],
+      weeklyFatalities[0][1],
+      weeklyHospitalizations[0][1],
     );
   }
 

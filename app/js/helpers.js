@@ -1,3 +1,5 @@
+import {cantons} from './cantons.js';
+
 // EXTREMELY basic (but fast) CSS parser for number and dates ONLY.
 // Do not use with just any data, it will explode spectacularely.
 function parseCSV(text, sep = ',') {
@@ -297,6 +299,18 @@ function extend(out) {
   return out;
 };
 
+function dataTodayIsIncomplete(variableData, canton, suffix) {
+  let todayIncomplete = (v) => {
+    return v[v.length - 1][1] == null && v[v.length - 1 - 7][1] != null;
+  };
+  if (canton !== "CH") {
+    return todayIncomplete(variableData[canton + suffix]);
+  }
+  return cantons.some((c) => {
+    return todayIncomplete(variableData[c.id + suffix]);
+  });
+}
+
 export {
   readCSV,
   getRow,
@@ -312,4 +326,5 @@ export {
   backwardsResample,
   getUserLanguage,
   extend,
+  dataTodayIsIncomplete,
 };
