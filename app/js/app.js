@@ -312,7 +312,7 @@ import config from './config.js';
               tooltip: {
                 formatter: function() {
                   return `<b>${this.series.yAxis.categories[this.point.y]}</b><br />
-                          ${_dc.t('heatmap_age.week')} ${this.point.x}<br />
+                          ${_dc.t('heatmap_age.week')} ${this.point.x % 53}<br />
                           ${this.point.value}`;
                 },
               },
@@ -325,13 +325,15 @@ import config from './config.js';
                       _dc.s.heatmap_age_sex_select
                   ],
               )) {
+                let j = 0;
                 for (const [keyYear, valueYear] of Object.entries(ageRange)) {
                   for (const [keyWeek, valueWeek] of Object.entries(valueYear)) {
                     seriesData.push([
-                      parseInt(keyWeek), i,
+                      parseInt(keyWeek) + (j * 53), i,
                       valueWeek[_dc.s.heatmap_age_variable_select],
                     ]);
                   }
+                  j++;
                 }
                 i++;
               }
