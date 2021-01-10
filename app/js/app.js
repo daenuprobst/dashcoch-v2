@@ -325,11 +325,13 @@ import config from './config.js';
                       _dc.s.heatmap_age_sex_select
                   ],
               )) {
-                for (const [keyDate, valueDate] of Object.entries(ageRange)) {
-                  seriesData.push([
-                    parseFloat(keyDate), i,
-                    valueDate[_dc.s.heatmap_age_variable_select],
-                  ]);
+                for (const [keyYear, valueYear] of Object.entries(ageRange)) {
+                  for (const [keyWeek, valueWeek] of Object.entries(valueYear)) {
+                    seriesData.push([
+                      parseInt(keyWeek), i,
+                      valueWeek[_dc.s.heatmap_age_variable_select],
+                    ]);
+                  }
                 }
                 i++;
               }

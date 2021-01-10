@@ -182,7 +182,7 @@ async function getAgeSexDist() {
             },
           ],
         ]),
-        ['sex', 'age_group', 'date'],
+        ['sex', 'age_group', 'year', 'week'],
         'sum',
     );
   }
