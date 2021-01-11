@@ -1,4 +1,7 @@
-import {getTargetCoutryDate, getChart, backwardsResample, roundColumn} from './helpers.js';
+import {
+  getTargetCoutryDate, getChart, backwardsResample, roundColumn,
+  dataTodayIsIncomplete,
+} from './helpers.js';
 
 export default class DailyAdaptiveChart {
   constructor(container, selectionChangedCallback) {
@@ -132,7 +135,8 @@ export default class DailyAdaptiveChart {
         'daily.title.' + state.daily_variable_select,
     )} ${_dc.t('cantons.' + state.daily_canton)}`;
 
-    let values = data[state.daily_variable_select][state.daily_canton + suffix]
+    let cantonalValues = data[state.daily_variable_select];
+    let values = cantonalValues[state.daily_canton + suffix];
 
     chart.series[0].update({
       type: suffix.includes('diff') ? 'column' : 'area',
@@ -141,6 +145,10 @@ export default class DailyAdaptiveChart {
     });
 
     if (suffix.includes('diff')) {
+      let skip = 3;
+      if (dataTodayIsIncomplete(cantonalValues, state.daily_canton, suffix)) {
+        skip++;
+      }
       chart.series[1].update({
         type: 'line',
         dashStyle: 'longdash',
@@ -148,7 +156,7 @@ export default class DailyAdaptiveChart {
         color: '#ffffff',
         marker: { enabled: false },
         name: _dc.t('daily.seven_day_avg') + ' ' + state.daily_canton,
-        data: roundColumn(backwardsResample(values.slice(0, -3), 7, 1, false), 3),
+        data: roundColumn(backwardsResample(values.slice(0, -skip), 7, 1, false), 3),
       });
     } else {
       chart.series[1].update({
