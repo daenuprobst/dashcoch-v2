@@ -148,7 +148,7 @@ export default class DailyAdaptiveChart {
         color: '#ffffff',
         marker: { enabled: false },
         name: _dc.t('daily.seven_day_avg') + ' ' + state.daily_canton,
-        data: roundColumn(backwardsResample(values.slice(0, -3), 7, 1, false), 3),
+        data: roundColumn(backwardsResample(values.slice(0, -7), 7, 1, false), 3),
       });
     } else {
       chart.series[1].update({
