@@ -19,7 +19,7 @@ async function getCases() {
     df[canton + '_pc'] = forwardFill(df[canton + '_pc']);
   }
 
-  // Multiply per capity columns to get per 10,000 values
+  // Multiply per capity columns to get per 100,000 values
   Object.keys(df).forEach(function(key, index) {
     if (key.includes('_pc')) {
       df[key] = multiplyColumn(df[key], 100000);

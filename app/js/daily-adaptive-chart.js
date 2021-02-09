@@ -44,6 +44,9 @@ export default class DailyAdaptiveChart {
               },
             },
           },
+          dataGrouping: {
+            approximation: "average",
+          },
         },
         column: {
           borderWidth: 0,
