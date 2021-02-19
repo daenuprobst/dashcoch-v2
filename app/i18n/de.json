@@ -195,7 +195,7 @@
         "title": "Anzahl Tests und Testpositivität (7-Tage-Schnitt)",
         "x_axis": "Anzahl Tests pro 1 000 000 Einwohner",
         "y_axis": "Anteil Positiver Tests [%]",
-        "info": "Diese Darstellung soll den Prozentsatz der positiven Tests und die Anzahl der Tests pro Kopf im Kontext zeigen. Idealerweise sollte sich ein Land unten rechts befinden, da dies bedeutet, dass einige Tests auch nur wenige positive Ergebnisse liefern. Auf der anderen Seite bedeutet die Position oben rechts, dass viele Tests zu einer hohen Positivitätsrate führen, was bedeutet, dass der Ausbruch schwerwiegend ist und es kein klares Bild des Ausmaßes des Ausbruchs gibt (der Schwellenwert dafür wurde von festgelegt die WHO bei 5%)."
+        "info": "Diese Darstellung soll den Prozentsatz der positiven Tests und die Anzahl der Tests pro Kopf im Kontext zeigen. Idealerweise sollte sich ein Land unten rechts befinden, da dies bedeutet, dass einige Tests auch nur wenige positive Ergebnisse liefern. Auf der anderen Seite bedeutet die Position oben rechts, dass viele Tests zu einer hohen Positivitätsrate führen, was bedeutet, dass der Ausbruch schwerwiegend ist und es kein klares Bild des Ausmaßes des Ausbruchs gibt (der Schwellenwert dafür wurde von der WHO bei 5% festgelegt)."
     },
     "hdi_stringency": {
         "title": "HDI, Stringenz und tägliche Fälle",
