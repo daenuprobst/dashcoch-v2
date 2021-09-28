@@ -432,6 +432,16 @@
         "Macedonia": "macedonia",
         "China": "China",
         "Seychelles": "Seychelles",
-        "Vanuatu": "Vanuatu"
+        "Vanuatu": "Vanuatu",
+        "North Macedonia": "Macedonia del Norte",
+        "Czechia": "Chequia",
+        "European Union": "Unión Europea",
+        "Europe": "Europa",
+        "South America": "América del Sur",
+        "North America": "América del Norte",
+        "Asia": "Asia",
+        "Africa": "Africa",
+        "Oceania": "Oceanía",
+        "Eswatini": "Eswatini"
     }
 }
